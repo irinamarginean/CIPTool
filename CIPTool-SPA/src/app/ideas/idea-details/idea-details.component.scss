@@ -1,0 +1,30 @@
+::ng-deep {
+  .p-timeline.p-timeline-horizontal .p-timeline-event-opposite {
+    max-width: min-content;
+  }
+
+  .p-timeline-left .p-timeline-event-opposite {
+    text-align: left !important;
+    position: relative;
+    left: -5px;
+  }
+
+  .p-timeline-event-separator {
+    position: relative;
+    left: 27px;
+  }
+
+  .p-text-secondary.available {
+    color: #005691;
+    font-weight: 600;
+  }
+
+  .p-timeline .p-timeline-event-marker {
+    border: 2px solid #005691;
+    border-radius: 50%;
+    width: 1rem;
+    height: 1rem;
+    background-color: #ffffff;
+  }
+}
+

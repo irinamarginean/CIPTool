@@ -1,0 +1,17 @@
+<div class="login-page">
+  <div class="form">
+    <img src="../assets/login_logo.png" id="logo" alt="">
+    <form class="login-form" (ngSubmit)="logIn()">
+      <div class="a-text-field credentials">
+        <input type="text" name="username" placeholder="Username" required [(ngModel)]="model.username"/>
+      </div>
+      <div class="a-text-field credentials">
+        <input type="password" name="password" placeholder="Password" required [(ngModel)]="model.password"/>
+      </div>
+      <button>Sign in</button>
+    </form>
+  </div>
+</div>
+<img src="../assets/bosch_supergraphic_background.png" id="bg" alt="">
+
+

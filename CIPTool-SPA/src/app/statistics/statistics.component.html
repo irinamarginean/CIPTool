@@ -1,0 +1,128 @@
+<body id="statistics">
+  <div class="container container-lg form-container">
+    <div class="row export-section">
+      <div class="date">
+        {{todayDate | date: 'dd.MM.yyyy'}}
+      </div>
+      <button class="export-btn" (click)="downloadStatistics()"><mat-icon svgIcon="document-arrow-down"></mat-icon>Export to PDF</button>
+    </div>
+    <div class="row idea-status-section">
+      <div class="section-card waiting-for-approval">
+        <div class="chart">
+          <p-chart type="doughnut" [data]="waitingForApprovalData" [options]="options" width="6vw" height="10vh"></p-chart>
+        </div>
+        <div class="icon waiting-for-approval">
+          <mat-icon svgIcon="hourglass-white" class="card-icon"></mat-icon> {{this.ideaStatistics?.waitingForApprovalIdeasNumber}}
+        </div>
+        <div class="card-title">
+          Waiting for approval
+          <div class="percentage">
+            {{this.waitingForApprovalPercentage}}%
+          </div>
+        </div>
+      </div>
+      <div class="section-card approved">
+        <div class="chart">
+          <p-chart type="doughnut" [data]="approvedData" [options]="options" width="6vw" height="10vh"></p-chart>
+        </div>
+        <div class="icon approved">
+          <mat-icon svgIcon="alert-success-white" class="card-icon"></mat-icon> {{this.ideaStatistics?.approvedIdeasNumber}}
+        </div>
+        <div class="card-title">
+          Approved
+          <div class="percentage">
+            {{this.approvedPercentage}}%
+          </div>
+        </div>
+      </div>
+      <div class="section-card postponed">
+        <div class="chart">
+          <p-chart type="doughnut" [data]="postponedData" [options]="options" width="6vw" height="10vh"></p-chart>
+        </div>
+        <div class="icon postponed">
+          <mat-icon svgIcon="clock-24-7-white" class="card-icon"></mat-icon> {{this.ideaStatistics?.postponedIdeasNumber}}
+        </div>
+        <div class="card-title">
+          Postponed
+          <div class="percentage">
+            {{this.postponedPercentage}}%
+          </div>
+        </div>
+      </div>
+      <div class="section-card declined">
+        <div class="chart">
+          <p-chart type="doughnut" [data]="declinedData" [options]="options" width="6vw" height="10vh"></p-chart>
+        </div>
+        <div class="icon declined">
+          <mat-icon svgIcon="abort-frame-white" class="card-icon"></mat-icon> {{this.ideaStatistics?.declinedIdeasNumber}}
+        </div>
+        <div class="card-title">
+          Declined
+          <div class="percentage">
+            {{this.declinedPercentage}}%
+          </div>
+        </div>
+      </div>
+      <div class="section-card implemented">
+        <div class="chart">
+          <p-chart type="doughnut" [data]="implementedData" [options]="options" width="6vw" height="10vh"></p-chart>
+        </div>
+        <div class="icon implemented">
+          <mat-icon svgIcon="flag-white" class="card-icon"></mat-icon> {{this.ideaStatistics?.implementedIdeasNumber}}
+        </div>
+        <div class="card-title">
+          Implemented
+          <div class="percentage">
+            {{this.implementedPercentage}}%
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row idea-status-section">
+      <div class="pie-charts-section">
+        <div class="pie-chart-section">
+          <div class="title">Registered ideas</div>
+          <p-chart type="pie" [data]="registeredIdeasData" [options]="registeredApprovedOptions" width="35vw" height="25vh"></p-chart>
+        </div>
+        <div class="pie-chart-section">
+          <div class="title">Approved ideas</div>
+          <p-chart type="pie" [data]="approvedIdeasData" [options]="registeredApprovedOptions" width="35vw" height="25vh"></p-chart>
+        </div>
+      </div>
+      <div class="pie-charts-section">
+        <div class="pie-chart-section">
+          <div class="otd-title">OTD Decision <span class="otd-percentage">{{this.ideaStatistics?.otdDecisionValue}}%</span></div>
+          <div class="subtitle">Leader decision date - Idea registration date</div>
+          <p-chart type="pie" [data]="otdDecisionData" [options]="registeredApprovedOptions" width="35vw" height="25vh"></p-chart>
+        </div>
+        <div class="pie-chart-section">
+          <div class="otd-title">OTD Implementation <span class="otd-percentage">{{this.ideaStatistics?.otdImplementationValue}}%</span></div>
+          <div class="subtitle">Actual implementation date - Planned implementation date</div>
+          <p-chart type="pie" [data]="otdImplementationData" [options]="registeredApprovedOptions" width="35vw" height="25vh"></p-chart>
+        </div>
+      </div>
+    </div>
+    <div class="row idea-status-section">
+      <div class="card">
+        <p-chart type="bar" [data]="financialData" [options]="financialOptions" width="82vw" height="60vh"></p-chart>
+      </div>
+    </div>
+    <div class="row idea-status-section">
+      <div class="card">
+        <p-chart type="bar" [data]="bonusData" [options]="bonusOptions" [plugins]="barChartPlugins" width="30vw" height="40vh"></p-chart>
+      </div>
+      <div class="financial-benefit-chart">
+        <div class="title">Ideas with financial benefits</div>
+        <div>
+          <p-chart type="pie" [data]="financialBenefitsData" [options]="financialBenefitsOptions" [plugins]="plugin" width="30vw" height="30vh"></p-chart>
+        </div>
+      </div>
+      <div class="financial-values-section">
+        <div class="title">Total money saved</div>
+        <div class="value">{{this.ideaStatistics?.totalMoneySaved}}<span class="symbol">€</span></div>
+        <div class="title">Total bonuses</div>
+        <div class="value">{{this.ideaStatistics?.totalBonuses}}<span class="symbol">€</span></div>
+      </div>
+    </div>
+  </div>
+</body>

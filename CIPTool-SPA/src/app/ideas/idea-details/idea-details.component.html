@@ -1,0 +1,241 @@
+<body>
+  <div class="container details-container">
+    <div class="description-container">
+      <div class="row info-section-body">
+        <div class="idea-info">
+          <div id="idea-title">{{this.model?.title}}
+            <button *ngIf="isIdeaOfCurrentAssociate()" class="edit-button" (click)="redirectToEditIdea()"><mat-icon svgIcon="edit-blue"></mat-icon></button>
+          </div>
+          <p id="idea-number">{{this.model?.ideaNumber}}</p>
+        </div>
+        <div id="idea-status">
+          <span [ngSwitch]="model.status">
+            <p *ngSwitchCase="0" class="waiting-for-approval-category">
+              <mat-icon svgIcon="hourglass"></mat-icon>Waiting for approval
+            </p>
+            <p *ngSwitchCase="1" class="approved-category">
+              <mat-icon svgIcon="alert-success"></mat-icon>Approved
+            </p>
+            <p *ngSwitchCase="2" class="postponed-category">
+              <mat-icon svgIcon="clock-24-7"></mat-icon>Postponed
+            </p>
+            <p *ngSwitchCase="3" class="declined-category">
+              <mat-icon svgIcon="abort-frame"></mat-icon>Declined
+            </p>
+            <p *ngSwitchCase="4" class="implemented-category">
+              <mat-icon svgIcon="flag"></mat-icon>Implemented
+            </p>
+          </span>
+        </div>
+      </div>
+      <div class="row section-body">
+        <div class="group-box timeline">
+          <p-timeline [value]="timeline" layout="horizontal">
+              <ng-template pTemplate="content" let-event>
+                  <small *ngIf="event.date !== null" class="p-text-secondary available">{{event.date | date: 'dd.MM.yyyy'}}</small>
+                  <small *ngIf="event.date === undefined || event.date === null"class="p-text-secondary">Not available</small>
+              </ng-template>
+              <ng-template pTemplate="opposite" let-event>
+                {{event.text}}
+            </ng-template>
+          </p-timeline>
+        </div>
+      </div>
+      <div class="row section-body">
+        <div class="a-text group-box">
+          <label class="special__label">Name of idea owner</label>
+          <p>{{model.ideaOwnerDetails?.associateName}}</p>
+          <div class="is-associate-responsible__label">
+            <label *ngIf="model.isAssociateResponsible">
+              <mat-icon svgIcon="box-delivery"></mat-icon>
+              Is responsible for the implementation
+            </label>
+            <label *ngIf="!model.isAssociateResponsible">
+              <mat-icon svgIcon="box-falling-off-disabled-light"></mat-icon>
+              Is not responsible for the implementation
+            </label>
+          </div>
+        </div>
+        <div class="department-info">
+          <div class=" container a-text group-box-horizontal">
+            <div class="row">
+              <div class="col-sm a-text horizontal-text-box">
+                <label>Group</label>
+                <p>{{model.ideaOwnerDetails?.group}}</p>
+              </div>
+              <div class="col-sm a-text horizontal-text-box">
+                <label class="">Group Leader</label>
+                <p>{{model.ideaOwnerDetails?.groupLeaderName}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="container a-text group-box-horizontal">
+            <div class="row">
+              <div class="col-sm a-text horizontal-text-box">
+                <label>Department</label>
+                <p>{{model.ideaOwnerDetails?.department}}</p>
+              </div>
+              <div class="col-sm a-text horizontal-text-box">
+                <label class="">Department Leader</label>
+                <p>{{model.ideaOwnerDetails?.departmentLeaderName}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row section-body">
+        <div class="group-box summary">
+          <div class="idea-summary-input">
+            <label>Current context</label>
+            <div class="a-text-field">
+              {{model.context}}
+            </div>
+          </div>
+          <div id="context-target-arrow">
+            <mat-icon svgIcon="arrow-down-frame"></mat-icon>
+          </div>
+          <div class="idea-summary-input">
+            <label>Target state</label>
+            <div class="a-text-field">
+              {{model.target}}
+            </div>
+          </div>
+        </div>
+        <div class="a-text group-box summary">
+          <div class="a-text categories-title">Categories
+            <div *ngIf="model.financialReport?.plannedBalance > 0" class="money-saver">
+              <mat-icon svgIcon="bank"></mat-icon>Money saver
+            </div>
+            <div *ngIf="model.financialReport?.plannedBalance === 0" class="no-money-impact">
+              <mat-icon svgIcon="coin"></mat-icon>No monetary impact
+            </div>
+            <div *ngIf="model.financialReport?.plannedBalance < 0" class="money-spender">
+              <mat-icon svgIcon="money-euro"></mat-icon>Money spender
+            </div>
+          </div>
+          <div class="container categories-box">
+            <div class="row">
+              <button *ngFor="let category of getSelectedCategories()" [ngClass]="category.selected ? 'selected' : 'not-selected'">{{category.text}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row section-body">
+        <div class="idea-description-box">
+          <div id="idea-description-label" class="a-text">Idea Description</div>
+            {{model.description}}
+        </div>
+        <div class="idea-description-right-column">
+          <div class="idea-description-group-box">
+            <div class="attachments-header">
+              Attachments
+              <button class="upload-button" (click)="downloadAllFiles()" title="Download all attachments">
+                  <mat-icon svgIcon="box-arrow-down"></mat-icon>
+                </button>
+            </div>
+            <ul id="attachment__list">
+              <li *ngFor="let attachment of model.attachments" class="attachment__list-item">
+                <div class="attachment">
+                  {{attachment.fileName}}
+                  <button>
+                  <mat-icon svgIcon="download" (click)="downloadFile(this.model.id, attachment.id, attachment.fileName)"></mat-icon>
+                  </button>
+                </div>
+                <p>
+                  Uploaded on: <span>{{attachment.uploadedAt | date:'dd.MM.yyyy'}}</span>
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row section-body">
+        <div class="group-box financial-report">
+          Financial Report
+          <br>
+          Planned values
+          <div class="">
+            <label>Savings</label>
+            <div class="a-text-field">
+              {{model.financialReport?.plannedSavings}}€
+            </div>
+          </div>
+          <div class="">
+            <label>Expenses</label>
+            <div class="a-text-field">
+              {{model.financialReport?.plannedExpenses}}€
+            </div>
+          </div>
+          <div class="a-text">
+            <label class="special__label">Balance</label>
+            <p>{{model.financialReport?.plannedBalance}}€</p>
+          </div>
+          <div class="a-text">
+            <label class="special__label">Bonus</label>
+            <p>{{model.financialReport?.bonus}}€</p>
+          </div>
+        </div>
+        <div class="group-box bonus">
+          Planned Bonus
+          <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+            <ng-container matColumnDef="lower-bound">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Lower Bound </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}}€ </td>
+            </ng-container>
+
+            <ng-container matColumnDef="upper-bound">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Upper Bound </th>
+              <td mat-cell *matCellDef="let element"> {{element.weight}}€ </td>
+            </ng-container>
+
+            <ng-container matColumnDef="award">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Award </th>
+              <td mat-cell *matCellDef="let element"> {{element.symbol}}€ </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row
+              *matRowDef="let row; columns: displayedColumns;"
+              [ngClass]="{'highlight': model.financialReport?.bonus === row.symbol }">
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div *ngIf="this.model.leaderResponses?.length > 0" class="row section-body summary">
+        <div class="group-box summary">
+          <div class="leader-response --title">
+            <div>Leader responses</div>
+            <div class="leader-response --container">
+              <ul>
+                <li class="response" *ngFor="let response of model.leaderResponses">
+                  <div class="leader-response --content">
+                    <span [ngSwitch]="response.responseStatus">
+                      <mat-icon svgIcon="alert-success" *ngSwitchCase="1"></mat-icon>
+                      <mat-icon svgIcon="clock-24-7" *ngSwitchCase="2"></mat-icon>
+                      <mat-icon svgIcon="abort-frame" *ngSwitchCase="3"></mat-icon>
+                    </span>
+                    <label class="leader-response --content" [className]="response.reason !== null ? '--reviewer-top' : '--reviewer-centered'">{{response.reviewerName}} has
+                      <span [ngSwitch]="response.responseStatus">
+                        <label class="approved-category" *ngSwitchCase="1"><strong>approved</strong></label>
+                        <label class="postponed-category" *ngSwitchCase="2"><strong>postponed</strong></label>
+                        <label class="declined-category" *ngSwitchCase="3"><strong>declined</strong></label>
+                      </span>
+                      the idea
+                    </label>
+                    <label class="leader-response --content --date">{{response.date | date: 'dd.MM.yyyy'}}</label>
+                  </div>
+                  <p class="leader-response --reason">
+                    {{response.reason}}
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      <div class="row" *ngIf="isIdeaOfCurrentAssociate() && model.status === 1">
+        <button class="form-btn" (click)="confirmImplementation(model.id)" >Confirm implementation</button>
+      </div>
+  </div>
+</body>

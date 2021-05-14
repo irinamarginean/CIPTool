@@ -1,0 +1,7 @@
+<div *ngIf="showOverlay" class="a-activity-indicator" class="my-overlay">
+  <div class="a-activity-indicator__top-box"></div>
+  <div class="a-activity-indicator__bottom-box"></div>
+</div>
+<mat-spinner *ngIf="showOverlay" ></mat-spinner>
+<app-nav></app-nav>
+<router-outlet></router-outlet>

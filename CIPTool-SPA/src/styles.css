@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/pink-bluegrey.css';
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background-color: #DFDFE0;
+}
+
+@font-face {
+  font-family: 'BoschSans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Pacifico Regular'), local('Pacifico-Regular'),
+       url('/src/assets/fonts/BoschSans-Black.woff') format('woff'), /* Modern Browsers */
+       url('./assets/fonts/BoschSans-Black.woff2') format('woff2'), /* Super Modern Browsers */
+}
+
+* {
+  font-family: BoschSans;
+}
+
+svg {
+  vertical-align: unset !important;
+}

@@ -1,0 +1,247 @@
+body {
+  background-color: #EFEFF0;
+  height: auto;
+}
+
+.container {
+  max-width: 1600px;
+}
+
+.form-container {
+  padding: 120px 0 50px 0;
+}
+
+.idea-status-section {
+  background-color:#fbfbfb;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  border: 0.5px solid #D4D7DA;
+}
+
+.section-card {
+  width: 19.5%;
+  color: white;
+  padding: 4px 4px 4px 10px;
+  border: 0.5px solid #D4D7DA;
+}
+
+.section-card .card-title {
+  bottom: 0;
+  font-size: 18px;
+  padding-top: 10px;
+}
+
+  .section-card .icon {
+    margin-top: 30px;
+    font-size: 38px;
+    width: 50%;
+    margin-left: -10px;
+    padding-bottom: 10px;
+    box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  }
+
+    .section-card .icon.waiting-for-approval {
+      background-color: #00406D;
+    }
+
+    .section-card .icon.approved {
+      background-color: #004937;
+    }
+
+    .section-card .icon.postponed {
+      background-color: #3D4750;
+    }
+
+    .section-card .icon.declined {
+      background-color: #B00010;
+    }
+
+    .section-card .icon.implemented {
+      background-color: #3C1A5F;
+    }
+
+  .section-card.waiting-for-approval {
+    background-color: #005691;
+  }
+
+  .section-card.approved {
+    background-color: #006249;
+  }
+
+  .section-card.postponed {
+    background-color: #525F6B;
+  }
+
+  .section-card.declined {
+    background-color: #EA0016;
+  }
+
+  .section-card.implemented {
+    background-color: #50237F;
+  }
+
+.chart {
+  float: right;
+  margin: 20px 2px 0 0;
+}
+
+.chart .waiting-for-approval {
+  background-color: #005691;
+}
+
+.chart .approved {
+  background-color: #006249;
+}
+
+.chart .postponed {
+  background-color: #525F6B;
+}
+
+.chart .declined {
+  background-color: #EA0016;
+}
+
+.chart .implemented {
+  background-color: #3C1A5F;
+}
+
+.percentage {
+  float: right;
+  font-size: 16px;
+  margin: 4px 42px 0 0;
+}
+
+.card-icon.mat-icon {
+  transform: scale(1.75);
+  vertical-align: super;
+  margin-left: 10px;
+}
+
+.pie-charts-section {
+  background-color:white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin: 10px auto;
+  border: 0.5px solid #D4D7DA;
+  width: 100%;
+}
+
+.pie-chart-section {
+  background-color:white;
+  padding: 10px;
+  margin: 10px 0;
+  width: 50%;
+}
+
+  .pie-chart-section .title {
+    font-size: 22px;
+    margin: 0 0 40px 130px;
+  }
+
+  .pie-chart-section .otd-title {
+    font-size: 22px;
+    margin: 0 0 4px 180px;
+    align-content: center;
+  }
+
+  .pie-chart-section .otd-title .otd-percentage {
+    font-size: 32px;
+    color: #525F6B;
+  }
+
+  .pie-chart-section .subtitle {
+    font-size: 16px;
+    align-content: center;
+    color: #525F6B;
+    margin: 0 0 30px 50px;
+  }
+
+.financial-benefit-chart {
+  background-color:white;
+  padding: 10px;
+  display: block;
+  justify-content: space-between;
+  margin: 10px auto;
+  border: 0.5px solid #D4D7DA;
+  width: 31vw;
+  height: auto;
+}
+
+  .financial-benefit-chart .title {
+    font-size: 22px;
+    margin: 0 0 20px 135px;
+    align-content: center;
+  }
+
+.financial-values-section {
+  background-color:white;
+  padding: 10px;
+  display: block;
+  justify-content: space-between;
+  margin: 10px auto;
+  border: 0.5px solid #D4D7DA;
+  width: 20vw;
+  height: auto;
+  text-align: center;
+}
+
+  .financial-values-section .title {
+    padding: 10px;
+    display: block;
+    margin: 10px auto;
+    font-size: 20px;
+  }
+
+  .financial-values-section .value {
+    padding: 10px;
+    margin: 10px auto;
+    width: 20vw;
+    height: auto;
+    font-size: 50px;
+    color: #005691;
+    display: inline;
+  }
+
+    .financial-values-section .value .symbol {
+      font-size: 30px;
+      color: #525F6B;
+    }
+
+.export-section {
+  padding: 10px 12px 2px 12px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 2px 0 2px;
+}
+
+  .export-section .date {
+    font-size: 22px;
+    align-self: center;
+  }
+
+.export-btn {
+  outline: 0;
+  background: #005691;
+  justify-content: center !important;
+  align-content: center !important;
+  border: 0;
+  padding: 10px;
+  color: #FFFFFF;
+  font-size: 12x;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+
+  .export-btn:hover, .export-btn:focus {
+    background: #4080AD;
+  }
+
+  .export-btn .mat-icon {
+    transform: scale(1.25);
+    vertical-align: text-bottom;
+    margin-right: 10px;
+  }

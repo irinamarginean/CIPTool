@@ -1,0 +1,108 @@
+body {
+  background-color: #DFDFE0 !important;
+  height: auto;
+}
+
+.container {
+  max-width: 1600px;
+}
+
+.form-container {
+  padding: 120px 0 50px 0;
+}
+
+.section-header {
+  font-weight: 500;
+}
+
+.section-body {
+  background-color:#EFEFF0;
+  margin-bottom: 30px;
+}
+
+.table-header {
+  width: 100%;
+}
+
+th {
+  background-color: #525F6B;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+  width: 320px;
+  padding: 10px;
+  text-align: center;
+}
+  th:nth-child(1) {
+    width: 25%;
+  }
+
+  th:nth-child(2) {
+    width: 15%;
+  }
+
+  th:nth-child(3) {
+    width: 13%;
+  }
+
+  th:nth-child(4) {
+    width: 13%;
+  }
+
+  th:nth-child(8) {
+    width: 10%;
+  }
+
+td {
+  text-align: center;
+  height: auto;
+  padding: 8px 2px;
+}
+
+td:nth-child(2) {
+  color: #005691;
+  font-weight: 550;
+}
+
+table {
+  border: 1px solid #D4D7DA;
+}
+
+tr {
+  border-bottom: solid white 0.5px;
+}
+
+tr:last-child {
+  border: 1px solid #D4D7DA
+}
+
+button {
+  border: none;
+}
+
+.mat-icon {
+  transform: scale(1.5);
+  width: 50px;
+  vertical-align: text-bottom;
+}
+
+#add-idea-btn {
+  text-transform: uppercase;
+  outline: 0;
+  background: #005691;
+  width: 60%;
+  justify-content: center !important;
+  align-content: center !important;
+  border: 0;
+  padding: 20px;
+  margin: 50px 110px;
+  color: #FFFFFF;
+  font-size: 16px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+#add-idea-btn:hover, #add-idea-bt:active, #add-idea-bt:focus {
+  background: #4080AD;
+ }
+

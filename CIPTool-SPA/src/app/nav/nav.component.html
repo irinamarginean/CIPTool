@@ -1,0 +1,45 @@
+<nav *ngIf="this.nav.isVisible" class="navbar fixed-top navbar-expand-sm navbar-light bg-white" style="border-bottom: 2px solid #D4D7DA;">
+  <img src="../../assets//supergraphic.jpg" width="100%" style="position: absolute; top: 0; left: 0;">
+  <a class="navbar-brand" routerLink="/home" style="margin-top: 18px;">
+    <img src="../../assets/login_logo.png" width="110" class="d-inline-block" >
+    | CIP Tool
+  </a>
+  <div class="collapse navbar-collapse justify-content-end">
+    <div class="my-2 my-sm-0">
+      <ul class="navbar-nav">
+        <li class="nav-item  active">
+          <a class="nav-link underline-animation" [routerLinkActive]="['nav-link-active']" routerLink="/home"><mat-icon svgIcon="home"></mat-icon>Home</a>
+        </li>
+        <li class="nav-item active underline-animation">
+          <a class="nav-link underline-animation" [routerLinkActive]="['nav-link-active']" routerLink="/ideas/add-idea"><mat-icon svgIcon="add-dark"></mat-icon>Add Idea</a>
+        </li>
+        <li class="nav-item active underline-animation">
+          <a class="nav-link underline-animation" [routerLinkActive]="['nav-link-active']" routerLink="/ideas/my-ideas"><mat-icon svgIcon="lightbulb-dark"></mat-icon>My Ideas</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link underline-animation" [routerLinkActive]="['nav-link-active']" routerLink="/ideas/all-ideas"><mat-icon svgIcon="globe-dark"></mat-icon>All Ideas</a>
+        </li>
+        <li *ngIf="authService.isLeader() || authService.isAdmin()" class="nav-item active underline-animation">
+          <a class="nav-link underline-animation" [routerLinkActive]="['nav-link-active']" routerLink="/leader-response"><mat-icon svgIcon="edit"></mat-icon>Leader Response</a>
+        </li>
+        <li class="nav-item active underline-animation">
+          <a class="nav-link underline-animation"  [routerLinkActive]="['nav-link-active']" routerLink="/statistics"><mat-icon svgIcon="chart"></mat-icon>Idea Status/Statistics</a>
+        </li>
+        <li class="nav-item active">
+          <div class="dropdown">
+            <a class="dropdown-toggle nav-link user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <mat-icon svgIcon="user"></mat-icon>
+              {{authService.getDisplayName()}}
+              <mat-icon svgIcon="down-small"></mat-icon>
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item user" routerLink="/login">Sign out</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+

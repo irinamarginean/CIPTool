@@ -1,0 +1,53 @@
+.mat-figure {
+  justify-content: center !important;
+  align-content: center !important;
+}
+
+.mat-icon{
+  transform: scale(1.5);
+  width: 50px;
+  vertical-align: text-bottom;
+}
+
+body {
+  background-color: #EFEFF0 !important;
+  height: 100%;
+}
+
+.process-description {
+  padding: 50px 20px;
+  background-color: white;
+  border: 0.5px solid #D4D7DA;
+}
+
+.home {
+  background-color: #fbfbfb;
+  padding: 70px 80px 40px 80px;
+  border: 1px solid #D4D7DA;
+}
+
+#empty-row {
+  height: 80px;
+  background-color: #EFEFF0;
+  padding-top: 170px;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 32px;
+}
+
+.home-title {
+  display: flex;
+}
+
+  .home-title button {
+    border: none;
+    background-color: #fbfbfb;
+    float: right;
+    padding: 14px;
+  }
+
+.home-buttons {
+  margin-left: auto;
+}

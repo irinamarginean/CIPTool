@@ -1,0 +1,238 @@
+<body>
+  <div class="container form-container">
+    <form #submitIdeaForm="ngForm" class="submit-idea__form">
+      <div #ideaCreatorTitle class="row">
+        <h1 class="section-header"><mat-icon svgIcon="address-book"></mat-icon>Idea Owner Information</h1>
+      </div>
+      <div class="row section-body">
+        <div class="a-text group-box">
+          <label class="special__label">Name of idea owner</label>
+          <p>{{addIdeaInfoDto.associateName}}</p>
+          <div class="a-toggle" id="is-resposible-toggle">
+            <mat-icon svgIcon="box-questionmark"></mat-icon>
+            <label class="a-toggle__left-label" id="responisble-toggle__label" for="toggle-default-left-label">
+              Is responsible for the implementation
+            </label>
+            <input #isResponsibleForImplementation="ngModel" [(ngModel)]="model.isAssociateResponsible"
+              type="checkbox"
+              id="toggle-default-left-label"
+              name="toggle-default-left-label"/>
+            <label class="a-toggle__box" for="toggle-default-left-label"></label>
+          </div>
+        </div>
+        <div class="department-info">
+          <div class=" container a-text group-box-horizontal">
+            <div class="row">
+              <div class="col-sm a-text horizontal-text-box">
+                <label>Group</label>
+                <p>{{addIdeaInfoDto.group}}</p>
+              </div>
+              <div class="col-sm a-text horizontal-text-box">
+                <label class="">Group Leader</label>
+                <p>{{addIdeaInfoDto.groupLeaderName}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="container a-text group-box-horizontal">
+            <div class="row">
+              <div class="col-sm a-text horizontal-text-box">
+                <label>Department</label>
+                <p>{{addIdeaInfoDto.department}}</p>
+              </div>
+              <div class="col-sm a-text horizontal-text-box">
+                <label class="">Department Leader</label>
+                <p>{{addIdeaInfoDto.departmentLeaderName}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <h1 class="section-header"><mat-icon svgIcon="summary"></mat-icon> Idea Summary</h1>
+      </div>
+      <div class="row section-body">
+        <div class="a-text idea-number">
+          <div class="idea-number__label">
+            Predicted Idea Number
+          </div>
+          <div class="idea-number__text">
+            {{addIdeaInfoDto.predictedIdeaNumber}}
+          </div>
+        </div>
+        <div class="a-text group-box summary">
+          <div class="idea-summary-input">
+            <label for="idea-title">Idea title</label>
+            <div class="a-text-field">
+              <input type="text" class="form-control"
+              #ideaTitle="ngModel" id="idea-title" required
+              aria-describedby="title-error"
+              [(ngModel)]="model.title" name="idea-title"/>
+              <small id="title-error" *ngIf="ideaTitle.invalid && (ideaTitle.dirty || ideaTitle.touched || isSubmissionButtonClicked)" class="p-error">Idea title is mandatory!</small>
+            </div>
+          </div>
+          <div class="idea-summary-input">
+            <label>Current context</label>
+            <div class="a-text-field">
+              <input type="text" class="form-control" #currentContext="ngModel" id="current-context" required [(ngModel)]="model.context" name="current-context"/>
+              <small *ngIf="currentContext.invalid && (currentContext.dirty || currentContext.touched || isSubmissionButtonClicked)" class="p-error">Current context is mandatory!</small>
+            </div>
+          </div>
+          <div class="idea-summary-input">
+            <label>Target state</label>
+            <div class="a-text-field">
+              <input type="text" class="form-control" #targetState="ngModel" id="target-state" required [(ngModel)]="model.target" name="target-state"/>
+              <small *ngIf="targetState.invalid && (targetState.dirty || targetState.touched || isSubmissionButtonClicked)" class="p-error">Target state is mandatory!</small>
+            </div>
+          </div>
+        </div>
+        <div class="a-text group-box summary">
+          <div class="a-text">Categories</div>
+          <div class="container categories-box">
+            <div class="row">
+              <button *ngFor="let category of selectedCategories" [ngClass]="category.selected ? 'selected' : 'not-selected'"
+              (click)="selectCategory(category)">{{category.text}}</button>
+            </div>
+          </div>
+        </div>
+        <div class="a-text group-box date">
+          <div class="idea-summary-input-date">
+            <label pTooltip="The date when the idea responsible is planning to start implementing the idea" tooltipPosition="right">Planned implementation date <strong>*</strong></label>
+            <div class="a-text-field">
+              <input type="date" class="form-control"
+                id="idea-planned-implentation-date" required
+                #ideaPlannedImplementationDate="ngModel"
+                [(ngModel)]="model.doDate" name="idea-implementation-date"/>
+            </div>
+            <small *ngIf="ideaPlannedImplementationDate.invalid && (ideaPlannedImplementationDate.dirty || ideaPlannedImplementationDate.touched || isSubmissionButtonClicked)"
+                class="p-error">Planned implementation date is mandatory!</small>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <h1 class="section-header"><mat-icon svgIcon="plan-a-to-b"></mat-icon> Idea Description & Attachments</h1>
+      </div>
+      <div class="row section-body">
+        <div class="idea-description-box">
+          <div id="idea-description-label" class="a-text">Idea Description</div>
+          <p-editor id="idea-description-editor" [style]="{'min-height': '400px'}"
+          name="idea-description" #ideaDescription="ngModel" [(ngModel)]="model.richTextDescription"
+          (onSelectionChange)="touchDescriptionEditor()" (onTextChange)="touchDescriptionEditor()"></p-editor>
+          <small *ngIf="(isDescriptionEditorTouched || isSubmissionButtonClicked) && (model.richTextDescription === null || model.richTextDescription === undefined)"
+            class="p-error">Description is mandatory!</small>
+        </div>
+        <div class="idea-description-right-column">
+          <div class="idea-description-group-box">
+            <div class="attachments-header">
+              Attachments
+              <button class="upload-button"
+                (click)="fileInput.click()">
+                <mat-icon svgIcon="link"></mat-icon>
+                <input type="file" #fileInput placeholder="Choose file" (change)="uploadFile(fileInput.files)" style="display: none;">
+              </button>
+              <p-progressBar [value]="fileUploadProgress"></p-progressBar>
+            </div>
+            <ul id="attachment__list">
+              <li *ngFor="let attachment of attachmentList" class="attachment__list-item">
+                <div class="attachment">
+                  {{attachment.name}}
+                  <button (click)="removeAttachment(attachment)">
+                    <mat-icon svgIcon="close"></mat-icon>
+                  </button>
+                </div>
+                <p>
+                  Uploaded at: <span>{{currentDate | date:'dd/MM/yyyy'}}</span>
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <h1 class="section-header"><mat-icon svgIcon="cash-frame"></mat-icon> Financial Report & Bonus</h1>
+      </div>
+      <div class="row section-body">
+        <div class="group-box financial-report">
+          Financial Report
+          <br>
+          Planned values
+          <div class="">
+            <label>Savings</label>
+            <div class="a-text-field">
+              <input type="number" name="savings" [(ngModel)]="savings" #savingsInput="ngModel" placeholder="0"/>€
+            </div>
+            <small *ngIf="savings < 0 && (savingsInput.dirty || savingsInput.touched)" class="p-error">This value should be non-negative!</small>
+          </div>
+          <div class="">
+            <label>Expenses</label>
+            <div class="a-text-field">
+              <input type="number" name="savings" [(ngModel)]="expenses" #expensesInput="ngModel" placeholder="0"/>€
+            </div>
+            <small *ngIf="expenses < 0 && (expensesInput.dirty || expensesInput.touched)" class="p-error">This value should be non-negative!</small>
+          </div>
+          <div class="a-text">
+            <label class="special__label">Balance</label>
+            <p>{{(savings === undefined || expenses === undefined) ? 0 : (savings - expenses)}}€</p>
+          </div>
+          <div class="a-text">
+            <label class="special__label">Bonus</label>
+            <p>{{this.getBonusValue(savings - expenses)}}€</p>
+          </div>
+        </div>
+        <div class="group-box bonus">
+          Planned Bonus
+          <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+            <ng-container matColumnDef="lower-bound">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Lower Bound </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}}€ </td>
+            </ng-container>
+
+            <ng-container matColumnDef="upper-bound">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Upper Bound </th>
+              <td mat-cell *matCellDef="let element"> {{element.weight}}€ </td>
+            </ng-container>
+
+            <ng-container matColumnDef="award">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Award </th>
+              <td mat-cell *matCellDef="let element"> {{element.symbol}}€ </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row
+              *matRowDef="let row; columns: displayedColumns;"
+              [ngClass]="{'highlight': (savings === undefined || expenses === undefined) ?
+                0 >= row.name && 0 < row.weight :
+                (savings - expenses) >= row.name && (savings - expenses) < row.weight}">
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md">
+          <button class="form-btn" (click)="showIdeaSimilarityDialog()">Submit</button>
+        </div>
+        <div class="col-md">
+          <button class="form-btn" (click)="scroll(ideaCreatorTitle)">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <p-toast position="bottom-right"></p-toast>
+  <p-dialog header="It looks like there are some similar ideas in this tool."
+    [(visible)]="isIdeaSimilarityDialogDisplayed" [style]="{width: '50vw'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+    <div>
+      <div *ngFor="let similarIdea of similarIdeas">
+          <div class="a-text-field">
+            <mat-icon *ngIf="similarIdea.similarity < 70" svgIcon="alert-warning"></mat-icon>
+            <mat-icon *ngIf="similarIdea.similarity >= 70" svgIcon="alert-error"></mat-icon>
+            <a href="http://localhost:4200/ideas/all-ideas/details/{{similarIdea.id.toLowerCase()}}">{{similarIdea.title}}</a>
+            is {{similarIdea.similarity | number: '1.2-2'}}% similar to your idea
+          </div>
+        </div>
+    </div>
+    <div class="similarity-dialog__footer">Are you sure you want to proceed?</div>
+    <p-footer>
+      <button pButton type="button" icon="pi pi-times" label="Cancel" class="p-button-outlined p-button-info" (click)="hideIdeaSimilarityDialog()"></button>
+      <button pButton type="button" icon="pi pi-check" label="Confirm" class="p-button-info" (click)="submitIdea()"></button>
+    </p-footer>
+  </p-dialog>
+</body>

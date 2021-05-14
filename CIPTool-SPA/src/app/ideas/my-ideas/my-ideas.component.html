@@ -1,0 +1,186 @@
+<html>
+  <body>
+    <div class="container container-lg form-container">
+        <div class="row">
+        <mat-icon svgIcon="hourglass"></mat-icon>
+        <h1 class="section-header">Waiting for approval ideas ({{waitingForApprovalIdeas.length}})</h1>
+      </div>
+      <div *ngIf="waitingForApprovalIdeas.length > 0" class="row section-body">
+        <table>
+          <tr class="table-header">
+            <th>Title</th>
+            <th>Categories</th>
+            <th>Reviewer</th>
+            <th>Submitted On</th>
+            <th>Modified On</th>
+            <th>Financial Report</th>
+            <th>Details</th>
+          </tr>
+          <tr *ngFor="let idea of waitingForApprovalIdeas">
+            <td><a [routerLink]="['/ideas/my-ideas/details/' + idea.id]">{{idea.title}}</a></td>
+            <td>{{idea.categories.length > 0 ? idea.categories.join(', ') : '-'}}</td>
+            <td>{{idea.reviewerName}}</td>
+            <td>{{idea.planDate | date: 'dd.MM.yyyy'}}</td>
+            <td>
+              <div *ngIf="idea.modifiedAt">{{idea.modifiedAt | date: 'dd.MM.yyyy'}}</div>
+              <div *ngIf="!idea.modifiedAt">-</div>
+            </td>
+            <td><button (click)="showFinancialReportDialog(idea.financialReport)"><mat-icon svgIcon="watch-on-blue"></mat-icon></button></td>
+            <td><button [routerLink]="['/ideas/my-ideas/details/' + idea.id]"><mat-icon svgIcon="arrow-right-blue"></mat-icon></button></td>
+          </tr>
+        </table>
+      </div>
+      <div class="row">
+        <mat-icon svgIcon="alert-success"></mat-icon>
+        <h1 class="section-header">Approved ideas ({{approvedIdeas.length}})</h1>
+      </div>
+      <div *ngIf="approvedIdeas.length > 0" class="row section-body">
+        <table>
+          <tr>
+            <th>Title</th>
+            <th>Categories</th>
+            <th>Reviewer</th>
+            <th>Submitted On</th>
+            <th>Leader Response On</th>
+            <th>Financial Report</th>
+            <th>Details</th>
+          </tr>
+          <tr *ngFor="let idea of approvedIdeas">
+            <td><a [routerLink]="['/ideas/my-ideas/details/' + idea.id]">{{idea.title}}</a></td>
+            <td>{{idea.categories.length > 0 ? idea.categories.join(', ') : '-'}}</td>
+            <td>{{idea.reviewerName}}</td>
+            <td>{{idea.planDate | date: 'dd.MM.yyyy'}}</td>
+            <td>
+              <div *ngIf="idea.leaderResponseAt">{{idea.leaderResponseAt | date: 'dd.MM.yyyy'}}</div>
+              <div *ngIf="!idea.leaderResponseAt">-</div>
+            </td>
+            <td><button (click)="showFinancialReportDialog(idea.financialReport)"><mat-icon svgIcon="watch-on-blue"></mat-icon></button></td>
+            <td><button [routerLink]="['/ideas/my-ideas/details/' + idea.id]"><mat-icon svgIcon="arrow-right-blue"></mat-icon></button></td>
+          </tr>
+        </table>
+      </div>
+      <div class="row">
+        <mat-icon svgIcon="clock-24-7"></mat-icon>
+        <h1 class="section-header">Postponed ideas ({{postponedIdeas.length}})</h1>
+      </div>
+      <div *ngIf="postponedIdeas.length > 0" class="row section-body">
+        <table>
+          <tr>
+            <th>Title</th>
+            <th>Categories</th>
+            <th>Reviewer</th>
+            <th>Submitted On</th>
+            <th>Leader Response On</th>
+            <th>Financial Report</th>
+            <th>Details</th>
+          </tr>
+          <tr *ngFor="let idea of postponedIdeas">
+            <td><a [routerLink]="['/ideas/my-ideas/details/' + idea.id]">{{idea.title}}</a></td>
+            <td>{{idea.categories.length > 0 ? idea.categories.join(', ') : '-'}}</td>
+            <td>{{idea.reviewerName}}</td>
+            <td>{{idea.planDate | date: 'dd.MM.yyyy'}}</td>
+            <td>
+              <div *ngIf="idea.leaderResponseAt">{{idea.leaderResponseAt | date: 'dd.MM.yyyy'}}</div>
+              <div *ngIf="!idea.leaderResponseAt">-</div>
+            </td>
+            <td><button (click)="showFinancialReportDialog(idea.financialReport)"><mat-icon svgIcon="watch-on-blue"></mat-icon></button></td>
+            <td><button [routerLink]="['/ideas/my-ideas/details/' + idea.id]"><mat-icon svgIcon="arrow-right-blue"></mat-icon></button></td>
+          </tr>
+        </table>
+      </div>
+      <div class="row">
+        <mat-icon svgIcon="abort-frame"></mat-icon>
+        <h1 class="section-header">Declined ideas ({{declinedIdeas.length}})</h1>
+      </div>
+      <div *ngIf="declinedIdeas.length > 0" class="row section-body">
+        <table>
+          <tr>
+            <th>Title</th>
+            <th>Categories</th>
+            <th>Reviewer</th>
+            <th>Submitted On</th>
+            <th>Leader Response On</th>
+            <th>Financial Report</th>
+            <th>Details</th>
+          </tr>
+          <tr *ngFor="let idea of declinedIdeas">
+            <td><a [routerLink]="['/ideas/my-ideas/details/' + idea.id]">{{idea.title}}</a></td>
+            <td>{{idea.categories.join(', ')}}</td>
+            <td>{{idea.reviewerName}}</td>
+            <td>{{idea.planDate | date: 'dd.MM.yyyy'}}</td>
+            <td>
+              <div *ngIf="idea.leaderResponseAt">{{idea.leaderResponseAt | date: 'dd.MM.yyyy'}}</div>
+              <div *ngIf="!idea.leaderResponseAt">-</div>
+            </td>
+            <td><button (click)="showFinancialReportDialog(idea.financialReport)"><mat-icon svgIcon="watch-on-blue"></mat-icon></button></td>
+            <td><button [routerLink]="['/ideas/my-ideas/details/' + idea.id]"><mat-icon svgIcon="arrow-right-blue"></mat-icon></button></td>
+          </tr>
+        </table>
+      </div>
+      <div class="row">
+        <mat-icon svgIcon="flag"></mat-icon>
+        <h1 class="section-header">Implemented ideas ({{implementedIdeas.length}})</h1>
+      </div>
+      <div *ngIf="implementedIdeas.length > 0" class="row section-body">
+        <table>
+          <tr>
+            <th>Title</th>
+            <th>Categories</th>
+            <th>Reviewer</th>
+            <th>Submitted On</th>
+            <th>Leader Response On</th>
+            <th>Implemented On</th>
+            <th>Financial Report</th>
+            <th>Details</th>
+          </tr>
+          <tr *ngFor="let idea of implementedIdeas">
+            <td><a [routerLink]="['/ideas/my-ideas/details/' + idea.id]">{{idea.title}}</a></td>
+            <td>{{idea.categories.length > 0 ? idea.categories.join(', ') : '-'}}</td>
+            <td>{{idea.reviewerName}}</td>
+            <td>{{idea.planDate | date: 'dd.MM.yyyy'}}</td>
+            <td>
+              <div *ngIf="idea.leaderResponseAt">{{idea.leaderResponseAt | date: 'dd.MM.yyyy'}}</div>
+              <div *ngIf="!idea.leaderResponseAt">-</div>
+            </td>
+            <td>
+              <div *ngIf="idea.actualImplementationDate">{{idea.actualImplementationDate | date: 'dd.MM.yyyy'}}</div>
+              <div *ngIf="!idea.actualImplementationDate">-</div>
+            </td>
+            <td><button (click)="showFinancialReportDialog(idea.financialReport)"><mat-icon svgIcon="watch-on-blue"></mat-icon></button></td>
+            <td><button [routerLink]="['/ideas/my-ideas/details/' + idea.id]"><mat-icon svgIcon="arrow-right-blue"></mat-icon></button></td>
+          </tr>
+        </table>
+      </div>
+      <p-dialog [(visible)]="isFinancialReportDisplayed" [style]="{width: '50vw'}" header="Financial Report & Bonus"
+      [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+        <div class="group-box financial-report">
+          Financial Report
+          <br>
+          Planned values
+          <div class="">
+            <label>Savings</label>
+            <div class="a-text-field">
+              {{financialReport.plannedSavings}}€
+            </div>
+          </div>
+          <div class="">
+            <label>Expenses</label>
+            <div class="a-text-field">
+              {{financialReport.plannedExpenses}}€
+            </div>
+          </div>
+          <div class="a-text">
+            <label class="special__label">Balance</label>
+            <p>{{financialReport.plannedBalance}}€</p>
+          </div>
+          <div class="a-text">
+            <label class="special__label">Bonus</label>
+            <p>{{financialReport.bonus}}€</p>
+          </div>
+        </div>
+      </p-dialog>
+      <p-dialog [(visible)]="isFinancialReportDisplayed" [style]="{width: '50vw'}">
+    </p-dialog>
+    </div>
+  </body>
+</html>

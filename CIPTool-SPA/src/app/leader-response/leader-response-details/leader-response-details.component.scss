@@ -1,0 +1,16 @@
+::ng-deep {
+  .p-timeline.p-timeline-horizontal .p-timeline-event-opposite {
+    max-width: min-content;
+  }
+
+  .p-timeline-left .p-timeline-event-opposite {
+    text-align: left !important;
+    position: relative;
+    left: -5px;
+  }
+
+  .p-timeline-event-separator {
+    position: relative;
+    left: 27px;
+  }
+}
