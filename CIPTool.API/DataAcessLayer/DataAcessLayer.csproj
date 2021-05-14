@@ -1,0 +1,86 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Repositories\AttachmentsRepositoryBase.cs" />
+    <Compile Remove="Repositories\RepositoryLocator.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Migrations\20201201225423_InitialMigration.cs" />
+    <Compile Include="Migrations\20201201225423_InitialMigration.Designer.cs" />
+    <Compile Include="Migrations\20201201230612_SecondMigration.cs" />
+    <Compile Include="Migrations\20201201230612_SecondMigration.Designer.cs" />
+    <Compile Include="Migrations\20201204084320_AddedSeedDataForStatuses.cs" />
+    <Compile Include="Migrations\20201204084320_AddedSeedDataForStatuses.Designer.cs" />
+    <Compile Include="Migrations\20201214103444_AddedAdditionalEntitiesForBonus.cs" />
+    <Compile Include="Migrations\20201214103444_AddedAdditionalEntitiesForBonus.Designer.cs" />
+    <Compile Include="Migrations\20210122103352_AddIdeaCategoriesTables.cs" />
+    <Compile Include="Migrations\20210122103352_AddIdeaCategoriesTables.Designer.cs" />
+    <Compile Include="Migrations\20210122104753_AddedLeaderResponseTable.cs" />
+    <Compile Include="Migrations\20210122104753_AddedLeaderResponseTable.Designer.cs" />
+    <Compile Include="Migrations\20210223152222_ModifiedEntities.cs" />
+    <Compile Include="Migrations\20210223152222_ModifiedEntities.Designer.cs" />
+    <Compile Include="Migrations\20210224100541_AddedMissingBonusRange.cs" />
+    <Compile Include="Migrations\20210224100541_AddedMissingBonusRange.Designer.cs" />
+    <Compile Include="Migrations\20210308174810_AddedAdditionalFieldsInIdeaEntity.cs" />
+    <Compile Include="Migrations\20210308174810_AddedAdditionalFieldsInIdeaEntity.Designer.cs" />
+    <Compile Include="Migrations\20210315122231_RemovedIntermediaryTableForCategories.cs" />
+    <Compile Include="Migrations\20210315122231_RemovedIntermediaryTableForCategories.Designer.cs" />
+    <Compile Include="Migrations\20210315131516_RemovedIdeaCategoryTable.cs" />
+    <Compile Include="Migrations\20210315131516_RemovedIdeaCategoryTable.Designer.cs" />
+    <Compile Include="Migrations\20210319162814_AddedDispalyNameToAssociate.cs" />
+    <Compile Include="Migrations\20210319162814_AddedDispalyNameToAssociate.Designer.cs" />
+    <Compile Include="Migrations\20210320101945_AddedPDCADatesInIdeaEntity.cs" />
+    <Compile Include="Migrations\20210320101945_AddedPDCADatesInIdeaEntity.Designer.cs" />
+    <Compile Include="Migrations\20210321162310_AddedReviewerInLeaderResponse.cs" />
+    <Compile Include="Migrations\20210321162310_AddedReviewerInLeaderResponse.Designer.cs" />
+    <Compile Include="Migrations\20210322125043_AddedIdeaNumberAndResponseStatus.cs" />
+    <Compile Include="Migrations\20210322125043_AddedIdeaNumberAndResponseStatus.Designer.cs" />
+    <Compile Include="Migrations\20210322132456_AddedIdeasToReviewInAssociateEntity.cs" />
+    <Compile Include="Migrations\20210322132456_AddedIdeasToReviewInAssociateEntity.Designer.cs" />
+    <Compile Include="Migrations\20210323184715_AddedMissingPrimaryKeys.cs" />
+    <Compile Include="Migrations\20210323184715_AddedMissingPrimaryKeys.Designer.cs" />
+    <Compile Include="Migrations\20210323195133_AddedMissingForeignKeys.cs" />
+    <Compile Include="Migrations\20210323195133_AddedMissingForeignKeys.Designer.cs" />
+    <Compile Include="Migrations\20210328144232_RemovedUnusedEntities.cs" />
+    <Compile Include="Migrations\20210328144232_RemovedUnusedEntities.Designer.cs" />
+    <Compile Include="Migrations\20210328144853_AddedAssociateEntityInLeaderResponse.cs" />
+    <Compile Include="Migrations\20210328144853_AddedAssociateEntityInLeaderResponse.Designer.cs" />
+    <Compile Include="Migrations\CIPToolContextModelSnapshot.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BusinessObjectLayer\BusinessObjectLayer.csproj" />
+  </ItemGroup>
+
+</Project>
