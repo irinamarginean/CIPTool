@@ -17,7 +17,7 @@
         <div class="card-title">
           Waiting for approval
           <div class="percentage">
-            {{this.waitingForApprovalPercentage}}%
+            {{this.waitingForApprovalPercentage | number : '1.2-2'}}%
           </div>
         </div>
       </div>
@@ -31,7 +31,7 @@
         <div class="card-title">
           Approved
           <div class="percentage">
-            {{this.approvedPercentage}}%
+            {{this.approvedPercentage | number : '1.2-2'}}%
           </div>
         </div>
       </div>
@@ -45,7 +45,7 @@
         <div class="card-title">
           Postponed
           <div class="percentage">
-            {{this.postponedPercentage}}%
+            {{this.postponedPercentage | number : '1.2-2'}}%
           </div>
         </div>
       </div>
@@ -59,7 +59,7 @@
         <div class="card-title">
           Declined
           <div class="percentage">
-            {{this.declinedPercentage}}%
+            {{this.declinedPercentage | number : '1.2-2'}}%
           </div>
         </div>
       </div>
@@ -73,7 +73,7 @@
         <div class="card-title">
           Implemented
           <div class="percentage">
-            {{this.implementedPercentage}}%
+            {{this.implementedPercentage | number : '1.2-2'}}%
           </div>
         </div>
       </div>

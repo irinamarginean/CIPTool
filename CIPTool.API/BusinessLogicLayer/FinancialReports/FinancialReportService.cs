@@ -82,18 +82,8 @@ namespace BusinessLogicLayer.FinancialReports
         private decimal GetBonusBalance(IdeaEntity idea)
         {
             var financialReport = idea.FinancialReport;
-            decimal balance;
 
-            if (idea.Status == ResponseStatus.WaitingForApprovalStatus || idea.Status == ResponseStatus.ImplementedStatus)
-            {
-                balance = financialReport.ActualSavings - financialReport.ActualExpenses;
-            }
-            else
-            {
-                balance = financialReport.PlannedSavings - financialReport.PlannedExpenses;
-            }
-
-            return balance;
+            return financialReport.ActualSavings - financialReport.ActualExpenses;
         }
     }
 }

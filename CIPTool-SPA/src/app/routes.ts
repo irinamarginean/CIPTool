@@ -1,3 +1,4 @@
+import { HasUnsavedDataGuard } from './_guards/hasUnsavedDataGuard';
 import { EditComponent } from './ideas/edit/edit.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { NavigateAwayFromLoginDeactivatorService } from './_services/navigateAwayFromLoginDeactivator.service';
@@ -14,11 +15,11 @@ import { LeaderResponseDetailsComponent } from './leader-response/leader-respons
 export const appRoutes: Routes = [
   { path: 'login', component: LoginComponent, canDeactivate: [NavigateAwayFromLoginDeactivatorService] },
   { path: 'home', component: HomeComponent },
-  { path: 'ideas/add-idea', component: AddIdeaComponent },
+  { path: 'ideas/add-idea', component: AddIdeaComponent, canDeactivate: [HasUnsavedDataGuard] },
   { path: 'ideas/my-ideas', component: MyIdeasComponent },
   { path: 'ideas/all-ideas', component: AllIdeasComponent },
   { path: 'ideas/my-ideas/details/:id', component: IdeaDetailsComponent },
-  { path: 'ideas/my-ideas/edit/:id', component: EditComponent },
+  { path: 'ideas/my-ideas/edit/:id', component: EditComponent, canDeactivate: [HasUnsavedDataGuard] },
   { path: 'ideas/all-ideas/details/:id', component: IdeaDetailsComponent },
   { path: 'leader-response', component: LeaderResponseOverviewComponent },
   { path: 'leader-response/details/:id', component: LeaderResponseDetailsComponent },

@@ -13,15 +13,18 @@ namespace BusinessLogicLayer.Ideas
         private readonly IdeaRepository ideaRepository;
         private readonly BaseRepository<Category> categoryRepository;
         private readonly BaseRepository<LeaderResponse> leaderResponseRepository;
+        private readonly BaseRepository<Attachment> attachmentRepository;
 
         public IdeaService(
             IdeaRepository ideaRepository, 
             BaseRepository<Category> categoryRepository, 
-            BaseRepository<LeaderResponse> leaderResponseRepository)
+            BaseRepository<LeaderResponse> leaderResponseRepository,
+            BaseRepository<Attachment> attachmentRepository)
         {
             this.ideaRepository = ideaRepository;
             this.categoryRepository = categoryRepository;
             this.leaderResponseRepository = leaderResponseRepository;
+            this.attachmentRepository = attachmentRepository;
         }
 
         public async Task<ICollection<IdeaEntity>> GetAllIdeas()
@@ -63,7 +66,7 @@ namespace BusinessLogicLayer.Ideas
             var allCategories = await categoryRepository.GetAll();
             var existingCategories = allCategories
                 .Where(x => categories
-                    .Any(c => c == x.Text))
+                    .Any(c => c.ToUpperInvariant() == x.Text.ToUpperInvariant()))
                 .ToList();
             List<string> stringCategoriesToAdd = categories.Except(existingCategories.Select(x => x.Text)).ToList();
 
@@ -127,6 +130,14 @@ namespace BusinessLogicLayer.Ideas
             var attachment = idea.Attachments.FirstOrDefault(x => x.FileName == filename);
 
             return attachment;
+        }
+
+        public async Task AddAttachment(ICollection<Attachment> attachmentsToAdd)
+        {
+            foreach (var attachment in attachmentsToAdd)
+            {
+                await attachmentRepository.Insert(attachment);
+            }
         }
     }
 }

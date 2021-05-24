@@ -12,6 +12,7 @@ namespace BusinessObjectLayer.Dtos
         public string RichTextDescription { get; set; }
         public string Context { get; set; }
         public string Target { get; set; }
+        public string ReviewerName { get; set; }
         public bool IsAssociateResponsible { get; set; }
         public ResponseStatus Status { get; set; }
         public DateTime? PlanDate { get; set; }

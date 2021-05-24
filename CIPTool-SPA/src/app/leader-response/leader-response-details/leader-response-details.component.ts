@@ -79,19 +79,31 @@ export class LeaderResponseDetailsComponent implements OnInit {
         { text: 'Plan date on', date: this.model.planDate },
         { text: 'Planned implementation date', date: this.model.doDate },
         { text: 'Leader response on', date: this.model.leaderResponseAt },
-        { text: 'Actual start implementation date', date: this.model.actualImplementationDate },
-        { text: 'Actual implementation date ', date: this.model.actualStartImplementationDate }
+        { text: 'Actual start implementation date', date: this.model.checkDate },
+        { text: 'Actual implementation date ', date: this.model.actDate }
       ];
     });
   }
 
   getSelectedCategories() {
-    return this.selectedCategories.map(x => {
+    let existingCategories = this.selectedCategories.map(x => {
       let category: any = { };
       category.text = x.text;
       category.selected = this.model.categories?.includes(x.text) ? true : false;
       return category;
     });
+    let newCategories = [];
+    let newCategoriesTitles = [];
+    newCategoriesTitles =  this.model.categories?.filter(x => !this.selectedCategories.map(category => category?.text).includes(x));
+    if (newCategoriesTitles?.length > 0) {
+    newCategories = newCategoriesTitles?.map(x => {
+        let category: any = { };
+        category.text = x;
+        category.selected = true;
+        return category;
+      });
+    }
+    return [...existingCategories, ...newCategories];
   }
 
   submitResponse(ideaId: string, responseStatus: number) {

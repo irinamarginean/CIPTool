@@ -128,6 +128,10 @@ body {
     margin: 20px 10px 20px 20px;
   }
 
+  .bonus-label {
+    margin-bottom: 20px;
+  }
+
 .group-box-horizontal {
     background-color: white !important;
     height: 80px;
@@ -345,6 +349,23 @@ ul#attachment__list {
 
 .is-associate-responsible__label {
   padding-top: 20px;
+}
+
+.financial-report-values {
+  padding: 20px 0;
+  width: 60%;
+}
+
+  .financial-report-values.planned {
+    float: left;
+  }
+
+  .financial-report-values.actual {
+    float: right;
+  }
+
+.computed-financial-report {
+  padding: 10px 0;
 }
 
 .leader-response .--container {

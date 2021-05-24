@@ -1,9 +1,11 @@
+using AspNetCore.Email;
 using AutoMapper;
 using BusinessLogicLayer.FinancialReports;
 using BusinessLogicLayer.Ideas;
 using BusinessLogicLayer.Statistics;
 using BusinessObjectLayer;
 using BusinessObjectLayer.Entities;
+using CIPTool.Helpers;
 using DataAcessLayer;
 using DataAcessLayer.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -113,7 +115,9 @@ namespace CIPTool
             services.AddScoped<IIdeaService, IdeaService>();
             services.AddScoped<IFinancialReportService, FinancialReportService>();
             services.AddScoped<IStatisticsService, StatisticsService>();
-    }
+
+            services.AddTransient<IEmailSender, Helpers.EmailSender>();
+        }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

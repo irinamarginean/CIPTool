@@ -11,14 +11,14 @@ export interface IdeaDetails {
   status: number;
   context: string;
   target: string;
+  reviewerName: string;
   ideaNumber: string;
   planDate?: Date;
   doDate?: Date;
   modifiedAt?: Date;
   leaderResponseAt?: Date;
-  plannedImplementationDate?: Date;
-  actualStartImplementationDate?: Date;
-  actualImplementationDate?: Date;
+  checkDate?: Date;
+  actDate?: Date;
   isAssociateResponsible: boolean;
   isIdeaSavingMoney: boolean;
   ideaOwnerDetails: AddIdeaInfoDto;

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AspNetCore.Email;
+using AutoMapper;
 using BusinessLogicLayer.FinancialReports;
 using BusinessLogicLayer.Ideas;
 using BusinessObjectLayer;
@@ -26,6 +27,7 @@ namespace CIPTool.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly SignInManager<IdentityUser> signInManager;
+        private readonly IEmailSender emailSender;
         private readonly IIdeaService ideaService;
         private readonly UserRepository userRepository;
         private readonly IFinancialReportService financialReportService;
@@ -34,6 +36,7 @@ namespace CIPTool.Controllers
         public IdeasController(
             IIdeaService ideaService,
             IFinancialReportService financialReportService,
+            IEmailSender emailSender,
             UserRepository userRepository,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
@@ -43,6 +46,7 @@ namespace CIPTool.Controllers
             this.ideaService = ideaService;
             this.financialReportService = financialReportService;
             this.userRepository = userRepository;
+            this.emailSender = emailSender;
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
@@ -75,6 +79,7 @@ namespace CIPTool.Controllers
                         PlannedBalance = idea.FinancialReport.PlannedBalance,
                         ActualSavings = idea.FinancialReport.ActualSavings,
                         ActualExpenses = idea.FinancialReport.ActualExpenses,
+                        ActualBalance = idea.FinancialReport.ActualBalance,
                         Bonus = idea.FinancialReport.Bonus.Bonus
                     },
                     Categories = idea.Categories.Select(x => x.Text).ToList(),
@@ -113,6 +118,7 @@ namespace CIPTool.Controllers
                         PlannedBalance = idea.FinancialReport.PlannedBalance,
                         ActualSavings = idea.FinancialReport.ActualSavings,
                         ActualExpenses = idea.FinancialReport.ActualExpenses,
+                        ActualBalance = idea.FinancialReport.ActualBalance,
                         Bonus = idea.FinancialReport.Bonus.Bonus
                     }
                 });
@@ -149,6 +155,7 @@ namespace CIPTool.Controllers
                         PlannedBalance = idea.FinancialReport.PlannedBalance,
                         ActualSavings = idea.FinancialReport.ActualSavings,
                         ActualExpenses = idea.FinancialReport.ActualExpenses,
+                        ActualBalance = idea.FinancialReport.ActualBalance,
                         Bonus = idea.FinancialReport.Bonus.Bonus
                     }
                 });
@@ -179,6 +186,7 @@ namespace CIPTool.Controllers
                         PlannedBalance = idea.FinancialReport.PlannedBalance,
                         ActualSavings = idea.FinancialReport.ActualSavings,
                         ActualExpenses = idea.FinancialReport.ActualExpenses,
+                        ActualBalance = idea.FinancialReport.ActualBalance,
                         Bonus = idea.FinancialReport.Bonus.Bonus
                     }
                 });
@@ -213,6 +221,7 @@ namespace CIPTool.Controllers
                 RichTextDescription = idea.RichTextDescription,
                 Target = idea.Target,
                 Context = idea.Context,
+                ReviewerName = idea.Reviewer.DisplayName,
                 Status = idea.Status,
                 PlanDate = idea.PlanDate,
                 DoDate = idea.DoDate,
@@ -230,6 +239,7 @@ namespace CIPTool.Controllers
                     PlannedBalance = idea.FinancialReport.PlannedBalance,
                     ActualSavings = idea.FinancialReport.ActualSavings,
                     ActualExpenses = idea.FinancialReport.ActualExpenses,
+                    ActualBalance = idea.FinancialReport.ActualBalance,
                     Bonus = idea.FinancialReport.Bonus.Bonus
                 },
                 Attachments = idea.Attachments.Select(x => new AttachmentDetailsDto
@@ -263,6 +273,9 @@ namespace CIPTool.Controllers
                 PlannedSavings = addIdeaDto.FinancialReport.PlannedSavings,
                 PlannedExpenses = addIdeaDto.FinancialReport.PlannedExpenses,
                 PlannedBalance = addIdeaDto.FinancialReport.PlannedSavings - addIdeaDto.FinancialReport.PlannedExpenses,
+                ActualSavings = addIdeaDto.FinancialReport.ActualSavings,
+                ActualExpenses = addIdeaDto.FinancialReport.ActualExpenses,
+                ActualBalance = addIdeaDto.FinancialReport.ActualSavings - addIdeaDto.FinancialReport.ActualExpenses,
                 UploadedAt = addIdeaDto.FinancialReport.UploadedAt,
                 ModifiedAt = addIdeaDto.FinancialReport.ModifiedAt,
             };
@@ -308,9 +321,79 @@ namespace CIPTool.Controllers
             var bonusTask = financialReportService.GenerateBonus(idea);
             var bonus = await bonusTask;
             idea.FinancialReport.Bonus = bonus;
-            idea.FinancialReportId = bonus.Id;
+            idea.FinancialReport.BonusId = bonus.Id;
 
             await ideaService.AddIdea(idea);
+
+            await emailSender.SendEmailAsync(
+                                    "fixed-term.Irina.Marginean@ro.bosch.com",
+                                    "Idea submission in CIP Tool\n",
+                                    "Thank you for your involvement in the Continuous Improvement Process.\n" +
+                                    "Have a nice day, \nSupport ECC CIP Tool");
+
+            return Ok();
+        }
+
+        [HttpPut("edit/{id}")]
+        public async Task<IActionResult> EditIdea(string id, [FromBody] UpdateIdeaDto updateIdeaDto)
+        {
+            var ideaToUpdate = await ideaService.GetIdeaById(id);
+
+            if (ideaToUpdate == null) return NotFound("No such idea found.");
+
+            ideaToUpdate.FinancialReport.PlannedSavings = updateIdeaDto.FinancialReport.PlannedSavings;
+            ideaToUpdate.FinancialReport.PlannedExpenses = updateIdeaDto.FinancialReport.PlannedExpenses;
+            ideaToUpdate.FinancialReport.PlannedBalance = updateIdeaDto.FinancialReport.PlannedSavings - updateIdeaDto.FinancialReport.PlannedExpenses;
+            ideaToUpdate.FinancialReport.ActualSavings = updateIdeaDto.FinancialReport.ActualSavings;
+            ideaToUpdate.FinancialReport.ActualExpenses = updateIdeaDto.FinancialReport.ActualExpenses;
+            ideaToUpdate.FinancialReport.ActualBalance = updateIdeaDto.FinancialReport.ActualSavings - updateIdeaDto.FinancialReport.ActualExpenses;
+            ideaToUpdate.FinancialReport.ModifiedAt = DateTime.Now;
+            ideaToUpdate.ModifiedAt = DateTime.Now;
+            ideaToUpdate.Title = updateIdeaDto.Title;
+            ideaToUpdate.Description = updateIdeaDto.Description;
+            ideaToUpdate.RichTextDescription = updateIdeaDto.RichTextDescription;
+            ideaToUpdate.Context = updateIdeaDto.Context;
+            ideaToUpdate.Target = updateIdeaDto.Target;
+            ideaToUpdate.IsAssociateResponsible = updateIdeaDto.IsAssociateResponsible;
+            ideaToUpdate.DoDate = updateIdeaDto.DoDate;
+            ideaToUpdate.CheckDate = updateIdeaDto.CheckDate;
+            ideaToUpdate.ActDate = updateIdeaDto.ActDate;
+            ideaToUpdate.Categories = await ideaService.GetIdeaCategories(ideaToUpdate, updateIdeaDto.Categories);
+            var bonus = await financialReportService.GenerateBonus(ideaToUpdate);
+            ideaToUpdate.FinancialReport.Bonus.Bonus = bonus.Bonus;
+            ideaToUpdate.FinancialReport.Bonus.BonusCorrectionFactorId = bonus.BonusCorrectionFactorId;
+            ideaToUpdate.FinancialReport.Bonus.BonusRangeId = bonus.BonusRangeId;
+
+            var attachments = ideaToUpdate.Attachments
+                .Where(x => updateIdeaDto.Attachments
+                    .Select(a => a.FileName)
+                    .Contains(x.FileName)).ToList();
+            var newAttachmentDtos = updateIdeaDto.Attachments
+                .Where(x => !ideaToUpdate.Attachments
+                    .Select(a => a.FileName)
+                    .Contains(x.FileName)).ToList();
+
+            var newAttachments = new List<Attachment>();
+
+            foreach (var attachmentDto in newAttachmentDtos)
+            {
+                var folderName = Path.Combine("Resources", "Ideas", ideaToUpdate.Associate.UserName, id);
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+                newAttachments.Add(new Attachment
+                {
+                    Id = Guid.NewGuid(),
+                    FileName = attachmentDto.FileName,
+                    Location = Path.Combine(pathToSave, attachmentDto.FileName),
+                    UploadedAt = attachmentDto.UploadedAt,
+                    Idea = ideaToUpdate
+                });
+            }
+
+            ideaToUpdate.Attachments = attachments;
+
+            await ideaService.UpdateIdea(ideaToUpdate);
+            await ideaService.AddAttachment(newAttachments);
 
             return Ok();
         }

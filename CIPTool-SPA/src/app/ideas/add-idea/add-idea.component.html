@@ -62,35 +62,59 @@
         <div class="a-text group-box summary">
           <div class="idea-summary-input">
             <label for="idea-title">Idea title</label>
-            <div class="a-text-field">
-              <input type="text" class="form-control"
-              #ideaTitle="ngModel" id="idea-title" required
-              aria-describedby="title-error"
-              [(ngModel)]="model.title" name="idea-title"/>
-              <small id="title-error" *ngIf="ideaTitle.invalid && (ideaTitle.dirty || ideaTitle.touched || isSubmissionButtonClicked)" class="p-error">Idea title is mandatory!</small>
+            <div>
+              <textarea class="form-control"
+                [rows]="1" [cols]="148" pInputTextarea autoResize="autoResize"
+                #ideaTitle="ngModel" id="idea-title" required
+                aria-describedby="title-error"
+                [(ngModel)]="model.title" name="idea-title">
+              </textarea>
+              <small id="title-error" *ngIf="ideaTitle.invalid && (ideaTitle.dirty || ideaTitle.touched || isSubmissionButtonClicked)" class="p-error">
+                Idea title is mandatory!
+              </small>
             </div>
           </div>
           <div class="idea-summary-input">
             <label>Current context</label>
-            <div class="a-text-field">
-              <input type="text" class="form-control" #currentContext="ngModel" id="current-context" required [(ngModel)]="model.context" name="current-context"/>
-              <small *ngIf="currentContext.invalid && (currentContext.dirty || currentContext.touched || isSubmissionButtonClicked)" class="p-error">Current context is mandatory!</small>
+            <div>
+              <textarea class="form-control" #currentContext="ngModel" [rows]="1" [cols]="148" pInputTextarea autoResize="autoResize"
+                id="current-context" required [(ngModel)]="model.context" name="current-context">
+              </textarea>
+              <small *ngIf="currentContext.invalid && (currentContext.dirty || currentContext.touched || isSubmissionButtonClicked)" class="p-error">
+                Current context is mandatory!
+              </small>
             </div>
           </div>
           <div class="idea-summary-input">
             <label>Target state</label>
-            <div class="a-text-field">
-              <input type="text" class="form-control" #targetState="ngModel" id="target-state" required [(ngModel)]="model.target" name="target-state"/>
-              <small *ngIf="targetState.invalid && (targetState.dirty || targetState.touched || isSubmissionButtonClicked)" class="p-error">Target state is mandatory!</small>
+            <div>
+              <textarea type="text" class="form-control" [rows]="1" [cols]="148" pInputTextarea autoResize="autoResize"
+                #targetState="ngModel" id="target-state" required [(ngModel)]="model.target" name="target-state">
+              </textarea>
+              <small *ngIf="targetState.invalid && (targetState.dirty || targetState.touched || isSubmissionButtonClicked)" class="p-error">
+                Target state is mandatory!
+              </small>
             </div>
           </div>
         </div>
         <div class="a-text group-box summary">
-          <div class="a-text">Categories</div>
+          <div class="a-text">
+            Categories
+            <button title="Add other category" class="add-category-button" (click)="selectOtherCategory()"><mat-icon svgIcon="square-add"></mat-icon></button>
+          </div>
           <div class="container categories-box">
             <div class="row">
               <button *ngFor="let category of selectedCategories" [ngClass]="category.selected ? 'selected' : 'not-selected'"
               (click)="selectCategory(category)">{{category.text}}</button>
+            </div>
+            <div class="row a-text-field other" *ngIf="this.isOtherCategoryDisplayed">
+              <div class="other-label">Other: </div>
+              <div class="other-category">
+                <input type="text" class="form-control" #currentContext="ngModel" id="other-category" required [(ngModel)]="otherCategoryTitle" name="other-category"/>
+              </div>
+              <button (click)="addOtherCategory()" class="add-other-category-btn">
+                Add
+              </button>
             </div>
           </div>
         </div>
@@ -154,32 +178,57 @@
         <div class="group-box financial-report">
           Financial Report
           <br>
-          Planned values
-          <div class="">
-            <label>Savings</label>
-            <div class="a-text-field">
-              <input type="number" name="savings" [(ngModel)]="savings" #savingsInput="ngModel" placeholder="0"/>€
+          <div class="financial-report-values planned">
+            <div class="">
+              <label>Planned Savings</label>
+              <div class="a-text-field">
+                <input type="number" name="savings" [(ngModel)]="plannedSavings" #savingsInput="ngModel" placeholder="0"/>€
+              </div>
+              <small *ngIf="plannedSavings < 0 && (savingsInput.dirty || savingsInput.touched)" class="p-error">This value should be non-negative!</small>
             </div>
-            <small *ngIf="savings < 0 && (savingsInput.dirty || savingsInput.touched)" class="p-error">This value should be non-negative!</small>
-          </div>
-          <div class="">
-            <label>Expenses</label>
-            <div class="a-text-field">
-              <input type="number" name="savings" [(ngModel)]="expenses" #expensesInput="ngModel" placeholder="0"/>€
+            <div class="">
+              <label>Planned Expenses</label>
+              <div class="a-text-field">
+                <input type="number" name="savings" [(ngModel)]="plannedExpenses" #expensesInput="ngModel" placeholder="0"/>€
+              </div>
+              <small *ngIf="plannedExpenses < 0 && (expensesInput.dirty || expensesInput.touched)" class="p-error">This value should be non-negative!</small>
             </div>
-            <small *ngIf="expenses < 0 && (expensesInput.dirty || expensesInput.touched)" class="p-error">This value should be non-negative!</small>
+            <div class="a-text computed-financial-report">
+              <label class="special__label">Planned Balance</label>
+              <p>{{(plannedSavings === undefined || plannedExpenses === undefined) ? 0 : (plannedSavings - plannedExpenses)}}€</p>
+            </div>
+            <div class="a-text computed-financial-report">
+              <label class="special__label">Planned Bonus</label>
+              <p>{{this.getBonusValue(plannedSavings - plannedExpenses)}}€</p>
+            </div>
           </div>
-          <div class="a-text">
-            <label class="special__label">Balance</label>
-            <p>{{(savings === undefined || expenses === undefined) ? 0 : (savings - expenses)}}€</p>
-          </div>
-          <div class="a-text">
-            <label class="special__label">Bonus</label>
-            <p>{{this.getBonusValue(savings - expenses)}}€</p>
+          <div class="financial-report-values actual">
+            <div class="">
+              <label>Actual Savings</label>
+              <div class="a-text-field">
+                <input type="number" name="savings" [(ngModel)]="actualSavings" #savingsInput="ngModel" placeholder="0"/>€
+              </div>
+              <small *ngIf="actualSavings < 0 && (savingsInput.dirty || savingsInput.touched)" class="p-error">This value should be non-negative!</small>
+            </div>
+            <div class="">
+              <label>Actual Expenses</label>
+              <div class="a-text-field">
+                <input type="number" name="savings" [(ngModel)]="actualExpenses" #expensesInput="ngModel" placeholder="0"/>€
+              </div>
+              <small *ngIf="actualExpenses < 0 && (expensesInput.dirty || expensesInput.touched)" class="p-error">This value should be non-negative!</small>
+            </div>
+            <div class="a-text computed-financial-report">
+              <label class="special__label">Actual Balance</label>
+              <p>{{(actualSavings === undefined || actualExpenses === undefined) ? 0 : (actualSavings - actualExpenses)}}€</p>
+            </div>
+            <div class="a-text computed-financial-report">
+              <label class="special__label">Actual Bonus</label>
+              <p>{{this.getBonusValue(actualSavings - actualExpenses)}}€</p>
+            </div>
           </div>
         </div>
         <div class="group-box bonus">
-          Planned Bonus
+          <div class="bonus-label">Bonus</div>
           <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
             <ng-container matColumnDef="lower-bound">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Lower Bound </th>
@@ -199,20 +248,22 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row
               *matRowDef="let row; columns: displayedColumns;"
-              [ngClass]="{'highlight': (savings === undefined || expenses === undefined) ?
+              [ngClass]="{'highlight': (actualSavings === undefined || actualExpenses === undefined) ?
                 0 >= row.name && 0 < row.weight :
-                (savings - expenses) >= row.name && (savings - expenses) < row.weight}">
+                (actualSavings - actualExpenses) >= row.name && (actualSavings - actualExpenses) < row.weight}">
             </tr>
           </table>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md">
-          <button class="form-btn" (click)="showIdeaSimilarityDialog()">Submit</button>
-        </div>
-        <div class="col-md">
-          <button class="form-btn" (click)="scroll(ideaCreatorTitle)">Cancel</button>
-        </div>
+      <div class="row submit-area">
+        <button class="form-btn" (click)="showIdeaSimilarityDialog()">
+          <mat-icon svgIcon="registration"></mat-icon>
+          Submit
+        </button>
+        <button class="form-outlined-btn" (click)="redirectToHome()">
+          <mat-icon svgIcon="close-blue"></mat-icon>
+          Cancel
+        </button>
       </div>
     </form>
   </div>

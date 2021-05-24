@@ -202,7 +202,8 @@ export class StatisticsComponent implements OnInit {
 
   renderRegisteredIdeas() {
     this.registeredIdeasData = {
-      labels: ['Approved', 'Postponed', 'Declined'],
+      labels: [`Approved (${this.ideaStatistics.approvedIdeasNumber})`, `Postponed (${this.ideaStatistics.postponedIdeasNumber})`,
+        `Declined (${this.ideaStatistics.declinedIdeasNumber})`],
       datasets: [
           {
               data: [this.ideaStatistics.approvedIdeasNumber, this.ideaStatistics.postponedIdeasNumber, this.ideaStatistics.declinedIdeasNumber],
@@ -238,7 +239,7 @@ export class StatisticsComponent implements OnInit {
 
   renderApprovedPieChart() {
     this.approvedIdeasData = {
-      labels: ['Implementation ongoing', 'Implemented'],
+      labels: [`Implementation ongoing (${this.ideaStatistics.approvedIdeasNumber})`, `Implemented (${this.ideaStatistics.implementedIdeasNumber})`],
       datasets: [
           {
               data: [this.ideaStatistics.approvedIdeasNumber, this.ideaStatistics.implementedIdeasNumber],
@@ -256,10 +257,12 @@ export class StatisticsComponent implements OnInit {
 
   renderOTDDecisionPieChart() {
     this.otdDecisionData = {
-      labels: ['< 10 days', '10 to 20 days', '> 20 days'],
+      labels: [`< 10 days (${this.ideaStatistics.otdDecisionGreenCategoryNumber})`, `10 to 20 days (${this.ideaStatistics.otdDecisionYellowCategoryNumber})`,
+        `> 20 days (${this.ideaStatistics.otdDecisionYellowCategoryNumber})`],
       datasets: [
           {
-              data: [this.ideaStatistics.otdDecisionGreenCategoryNumber, this.ideaStatistics.otdDecisionYellowCategoryNumber, this.ideaStatistics.otdDecisionYellowCategoryNumber],
+              data: [this.ideaStatistics.otdDecisionGreenCategoryNumber, this.ideaStatistics.otdDecisionYellowCategoryNumber,
+                this.ideaStatistics.otdDecisionYellowCategoryNumber],
               backgroundColor: [
                   "#9ACE58",
                   "#FDC351",
@@ -276,10 +279,12 @@ export class StatisticsComponent implements OnInit {
 
   renderOTDImplementationPieChart() {
     this.otdImplementationData = {
-      labels: ['< 10 days', '10 to 20 days', '> 20 days'],
+      labels: [`< 10 days (${this.ideaStatistics.otdImplementationGreenCategoryNumber})`, `10 to 20 days (${this.ideaStatistics.otdImplementationYellowCategoryNumber})`,
+        `> 20 days (${this.ideaStatistics.otdImplementationRedCategoryNumber})`],
       datasets: [
           {
-              data: [this.ideaStatistics.otdImplementationGreenCategoryNumber, this.ideaStatistics.otdImplementationYellowCategoryNumber, this.ideaStatistics.otdImplementationRedCategoryNumber],
+              data: [this.ideaStatistics.otdImplementationGreenCategoryNumber, this.ideaStatistics.otdImplementationYellowCategoryNumber,
+                this.ideaStatistics.otdImplementationRedCategoryNumber],
               backgroundColor: [
                 "#9ACE58",
                 "#FDC351",
@@ -296,7 +301,7 @@ export class StatisticsComponent implements OnInit {
 
   renderFinancialBenefitsPieChart() {
     this.financialBenefitsData = {
-      labels: ['Financial benefits', 'No financial benefits'],
+      labels: [`Financial benefits (${this.ideaStatistics.financialBenefitsIdeasNumber})`, `No financial benefits (${this.ideaStatistics.noFinancialBenefitsIdeasNumber})`],
       datasets: [
           {
               data: [this.ideaStatistics.financialBenefitsIdeasNumber, this.ideaStatistics.noFinancialBenefitsIdeasNumber],

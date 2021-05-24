@@ -1,7 +1,8 @@
-import { Attachment } from './../../_models/attachment';
+import { EditIdeaDto } from './../../_models/editIdeaDto';
+import { HasUnsavedData } from './../../_interfaces/hasUnsavedData';
 import { AuthService } from './../../_services/auth.service';
 import { IdeaDetails } from './../../_models/ideaDetails';
-import { Component, OnInit, AfterViewInit, ViewChild, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, Output, ChangeDetectorRef, Input } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -11,6 +12,9 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpEventType, HttpResponse } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { AttachmentDetails } from 'src/app/_models/attachmentDetails';
+import { NgForm } from '@angular/forms';
+import { Attachment } from 'src/app/_models/attachment';
+import { FinancialReport } from 'src/app/_models/financialReport';
 
 export interface PeriodicElement {
   name: number;
@@ -38,29 +42,25 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./edit.component.css', './edit.component.scss'],
   providers: [MessageService]
 })
-export class EditComponent implements OnInit {
+export class EditComponent implements OnInit, HasUnsavedData {
 
   model: IdeaDetails = {} as IdeaDetails;
   displayedColumns: string[] = ['lower-bound', 'upper-bound', 'award'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
 
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('submitIdeaForm') submitForm: NgForm;
 
   fileUploadProgress: number;
   fileUploadMessage: string;
   @Output() public onUploadFinished = new EventEmitter();
 
+  @Input() selectedCategories: any[];
+
   timeline: any[];
 
-  selectedCategories: any[] = [
-    { text: 'ECC Strategy', selected: false },
-    { text: 'Organization', selected: false },
-    { text: 'Process', selected: false },
-    { text: 'R&D', selected: false },
-    { text: 'Comfort related', selected: false },
-    { text: 'Test IDEA', selected: false },
-    { text: 'Imported', selected: false },
-  ];
+  isOtherCategoryDisplayed: boolean = false;
+  otherCategoryTitle: string;
 
   attachmentList: Array<File> = new Array<File>();
   currentDate = new Date();
@@ -68,21 +68,45 @@ export class EditComponent implements OnInit {
 
   existingFilesToDelete: Array<string> = new Array<string>();
 
+  plannedSavings: number = 0;
+  plannedExpenses: number = 0;
+
+  actualSavings: number = 0;
+  actualExpenses: number = 0;
+
   constructor(private httpClient: HttpClient, private ideaService: IdeaService, public authService: AuthService, private route: ActivatedRoute, private router: Router,
-              private messageService: MessageService) { }
+              private messageService: MessageService, private changeDetection: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.loadIdeaDetails();
+    this.selectedCategories = [
+      { text: 'ECC Strategy', selected: false },
+      { text: 'Organization', selected: false },
+      { text: 'Process', selected: false },
+      { text: 'R&D', selected: false },
+      { text: 'Comfort related', selected: false },
+      { text: 'Test IDEA', selected: false },
+      { text: 'Imported', selected: false },
+    ];
+  }
+
+  hasUnsavedData(): boolean {
+    return this.submitForm.dirty;
   }
 
   loadIdeaDetails() {
     const datepipe: DatePipe = new DatePipe('en-US')
     this.ideaService.getIdeaById(this.route.snapshot.params.id).subscribe(ideaDetails => {
       this.model = ideaDetails;
+      this.plannedSavings = this.model.financialReport.plannedSavings;
+      this.plannedExpenses = this.model.financialReport.plannedExpenses;
+      this.actualSavings = this.model.financialReport.actualSavings;
+      this.actualExpenses = this.model.financialReport.actualExpenses;
       if (ideaDetails.ideaOwnerDetails.isLeader) {
         this.model.ideaOwnerDetails.groupLeaderName = ideaDetails.ideaOwnerDetails.associateName;
       }
       this.loadTimeline();
+      this.selectedCategories = this.getSelectedCategories();
     });
   }
 
@@ -96,17 +120,40 @@ export class EditComponent implements OnInit {
     ];
     this.timeline[0].date = this.model.planDate;
     this.timeline[1].date = this.model.doDate;
-    this.timeline[3].date = this.model.actualStartImplementationDate;
-    this.timeline[4].date = this.model.actualImplementationDate;
+    this.timeline[3].date = this.model.checkDate;
+    this.timeline[4].date = this.model.actDate;
   }
 
   getSelectedCategories() {
-    return this.selectedCategories.map(x => {
-      let category: any = { };
-      category.text = x.text;
-      category.selected = this.model.categories?.includes(x.text) ? true : false;
-      return category;
-    });
+    this.selectedCategories.forEach(x => {
+      x.selected = this.model.categories?.includes(x.text) ? true : false;
+    })
+    let newCategories = [];
+    let newCategoriesTitles = [];
+    newCategoriesTitles =  this.model.categories?.filter(x => !this.selectedCategories.map(category => category?.text).includes(x));
+    if (newCategoriesTitles?.length > 0) {
+      newCategoriesTitles?.forEach(x => {
+        let category: any = { };
+        category.text = x;
+        category.selected = true;
+        this.selectedCategories.push(category);
+      });
+    }
+    return this.selectedCategories;
+  }
+
+  selectOtherCategory() {
+    this.isOtherCategoryDisplayed = !this.isOtherCategoryDisplayed;
+  }
+
+  selectCategory(category) {
+    category.selected = !category.selected;
+  }
+
+  addOtherCategory() {
+    let newCategory = {text: this.otherCategoryTitle, selected: true }
+    this.selectedCategories.push(newCategory);
+    this.isOtherCategoryDisplayed = false;
   }
 
   confirmImplementation(ideaId: string) {
@@ -164,15 +211,62 @@ export class EditComponent implements OnInit {
   }
 
   removeAttachment(attachment: AttachmentDetails) {
-    this.existingFilesToDelete.push(attachment.fileName);
+    this.ideaService.removeFile(this.model.id, attachment.fileName).subscribe();
     this.model.attachments = this.model.attachments.filter(x => x.fileName !== attachment.fileName);
+  }
+
+  getBonusValue(balance: number) {
+    if (balance === undefined) {
+      balance = 0;
+    }
+    let bonus = ELEMENT_DATA.filter(x => x.name <= balance && x.weight > balance)[0]?.symbol;
+    if (bonus === undefined) {
+      bonus = 0;
+    }
+    return bonus;
   }
 
   isIdeaOfCurrentAssociate() {
     return this.model.ideaOwnerDetails?.associateName === this.authService.getFirstNameAndLastName();
   }
 
-  redirectToEditIdea() {
-    this.router.navigate(['my-ideas/edit/' + this.model.id]);
+  redirectToIdeaDetails() {
+    this.router.navigate(['ideas/my-ideas/details/' + this.model.id]);
+  }
+
+  saveIdea() {
+    let updateIdeaDto: EditIdeaDto = {
+      title: this.model.title,
+      context: this.model.context,
+      target: this.model.target,
+      doDate: this.model.doDate,
+      checkDate: this.model.checkDate,
+      actDate: this.model.actDate,
+      modifiedAt: new Date(),
+      isAssociateResponsible: this.model.isAssociateResponsible,
+      description: document.getElementById('idea-description-editor').innerText,
+      richTextDescription: this.model.richTextDescription,
+      categories: this.selectedCategories.filter(category => category.selected).map(category => category.text),
+      attachments: this.model.attachments,
+      financialReport: {} as FinancialReport
+    };
+    for (let file of this.attachmentList) {
+      let currentAttachment = {} as Attachment;
+      currentAttachment.fileName = file.name;
+      currentAttachment.uploadedAt = new Date();
+      updateIdeaDto.attachments.push(currentAttachment);
+    }
+    updateIdeaDto.financialReport.plannedSavings = this.plannedSavings as number;
+    updateIdeaDto.financialReport.plannedExpenses = this.plannedExpenses as number;
+    updateIdeaDto.financialReport.actualSavings = this.actualSavings as number;
+    updateIdeaDto.financialReport.actualExpenses = this.actualExpenses as number;
+
+    this.ideaService.updateIdea(this.model.id, updateIdeaDto).subscribe(() => {
+      this.submitForm.form.markAsPristine();
+      this.router.navigate(['ideas/my-ideas/details/' + this.model.id]);
+    },
+    error => {
+      this.messageService.add({severity:'error', summary:'Submission was unsuccessful!'});
+    });
   }
 }

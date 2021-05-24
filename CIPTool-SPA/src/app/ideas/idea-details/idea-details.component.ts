@@ -76,19 +76,31 @@ export class IdeaDetailsComponent implements OnInit {
         { text: 'Plan date on', date: this.model.planDate },
         { text: 'Planned implementation date', date: this.model.doDate },
         { text: 'Leader response on', date: this.model.leaderResponseAt },
-        { text: 'Actual start implementation date', date: this.model.actualStartImplementationDate },
-        { text: 'Actual implementation date ', date: this.model.actualImplementationDate }
+        { text: 'Actual start implementation date', date: this.model.checkDate },
+        { text: 'Actual implementation date ', date: this.model.actDate }
       ];
     });
   }
 
   getSelectedCategories() {
-    return this.selectedCategories.map(x => {
+    let existingCategories = this.selectedCategories.map(x => {
       let category: any = { };
       category.text = x.text;
       category.selected = this.model.categories?.includes(x.text) ? true : false;
       return category;
     });
+    let newCategories = [];
+    let newCategoriesTitles = [];
+    newCategoriesTitles =  this.model.categories?.filter(x => !this.selectedCategories.map(category => category?.text).includes(x));
+    if (newCategoriesTitles?.length > 0) {
+    newCategories = newCategoriesTitles?.map(x => {
+        let category: any = { };
+        category.text = x;
+        category.selected = true;
+        return category;
+      });
+    }
+    return [...existingCategories, ...newCategories];
   }
 
   confirmImplementation(ideaId: string) {
@@ -118,7 +130,6 @@ export class IdeaDetailsComponent implements OnInit {
 
   downloadAllFiles() {
     let allFiles: Array<Attachment> = this.model.attachments;
-
     for (let attachment of allFiles) {
       this.downloadFile(this.model.id, attachment.id, attachment.fileName);
     }
@@ -128,7 +139,24 @@ export class IdeaDetailsComponent implements OnInit {
     return this.model.ideaOwnerDetails?.associateName === this.authService.getFirstNameAndLastName();
   }
 
+  canIdeaBeEditedByCurrentUser() {
+    return this.isIdeaOfCurrentAssociate() ||
+           this.authService.isAdmin() ||
+           (this.authService.isLeader() && this.model?.reviewerName === this.authService.getDisplayName());
+  }
+
   redirectToEditIdea() {
     this.router.navigate(['ideas/my-ideas/edit/' + this.model.id]);
+  }
+
+  getBonusValue(balance: number) {
+    if (balance === undefined) {
+      balance = 0;
+    }
+    let bonus = ELEMENT_DATA.filter(x => x.name <= balance && x.weight > balance)[0]?.symbol;
+    if (bonus === undefined) {
+      bonus = 0;
+    }
+    return bonus;
   }
 }

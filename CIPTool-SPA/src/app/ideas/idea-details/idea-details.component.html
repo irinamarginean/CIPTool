@@ -4,7 +4,7 @@
       <div class="row info-section-body">
         <div class="idea-info">
           <div id="idea-title">{{this.model?.title}}
-            <button *ngIf="isIdeaOfCurrentAssociate()" class="edit-button" (click)="redirectToEditIdea()"><mat-icon svgIcon="edit-blue"></mat-icon></button>
+            <button *ngIf="canIdeaBeEditedByCurrentUser()" class="edit-button" (click)="redirectToEditIdea()"><mat-icon svgIcon="edit-blue"></mat-icon></button>
           </div>
           <p id="idea-number">{{this.model?.ideaNumber}}</p>
         </div>
@@ -123,7 +123,7 @@
       <div class="row section-body">
         <div class="idea-description-box">
           <div id="idea-description-label" class="a-text">Idea Description</div>
-            {{model.description}}
+          <div [innerHTML]="model.richTextDescription"></div>
         </div>
         <div class="idea-description-right-column">
           <div class="idea-description-group-box">
@@ -153,30 +153,55 @@
         <div class="group-box financial-report">
           Financial Report
           <br>
-          Planned values
-          <div class="">
-            <label>Savings</label>
-            <div class="a-text-field">
-              {{model.financialReport?.plannedSavings}}€
+          <div class="financial-report-values planned">
+            <div class="">
+              <label>Planned Savings</label>
+              <div class="a-text-field">
+                {{model.financialReport?.plannedSavings}}€
+              </div>
+            </div>
+            <div class="">
+              <label>Planned Expenses</label>
+              <div class="a-text-field">
+                {{model.financialReport?.plannedExpenses}}€
+              </div>
+            </div>
+            <div class="a-text computed-financial-report">
+              <label class="special__label">Planned Balance</label>
+              <p>{{model.financialReport?.plannedBalance}}€</p>
+            </div>
+            <div class="a-text computed-financial-report">
+              <label class="special__label">Planned Bonus</label>
+              <p>{{this.getBonusValue(model.financialReport?.plannedBalance)}}€</p>
             </div>
           </div>
-          <div class="">
-            <label>Expenses</label>
-            <div class="a-text-field">
-              {{model.financialReport?.plannedExpenses}}€
+          <div class="financial-report-values actual">
+            <div class="">
+              <label>Actual Savings</label>
+              <div class="a-text-field">
+                {{model.financialReport?.actualSavings}}€
+              </div>
             </div>
-          </div>
-          <div class="a-text">
-            <label class="special__label">Balance</label>
-            <p>{{model.financialReport?.plannedBalance}}€</p>
-          </div>
-          <div class="a-text">
-            <label class="special__label">Bonus</label>
-            <p>{{model.financialReport?.bonus}}€</p>
+            <div class="">
+              <label>Actual Expenses</label>
+              <div class="a-text-field">
+                {{model.financialReport?.actualExpenses}}€
+              </div>
+            </div>
+            <div class="a-text computed-financial-report">
+              <label class="special__label">Actual Balance</label>
+              <p>{{(model.financialReport?.actualSavings === undefined || model.financialReport?.actualExpenses === undefined) ?
+                0 : (model.financialReport?.actualSavings - model.financialReport?.actualExpenses)}}€
+              </p>
+            </div>
+            <div class="a-text computed-financial-report">
+              <label class="special__label">Actual Bonus</label>
+              <p>{{model.financialReport?.bonus}}€</p>
+            </div>
           </div>
         </div>
         <div class="group-box bonus">
-          Planned Bonus
+          <div class="bonus-label">Bonus</div>
           <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
             <ng-container matColumnDef="lower-bound">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Lower Bound </th>

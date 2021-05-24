@@ -6,6 +6,8 @@ namespace BusinessObjectLayer.Dtos
     {
         public decimal PlannedSavings { get; set; }
         public decimal PlannedExpenses { get; set; }
+        public decimal ActualSavings { get; set; }
+        public decimal ActualExpenses { get; set; }
         public DateTime? UploadedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
     }

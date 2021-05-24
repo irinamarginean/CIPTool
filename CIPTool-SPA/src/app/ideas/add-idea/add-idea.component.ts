@@ -1,3 +1,4 @@
+import { HasUnsavedData } from './../../_interfaces/hasUnsavedData';
 import { IdeaSimilarityDto } from './../../_models/ideaSimilarityDto';
 import { AddIdeaSimilarityDto } from './../../_models/addIdeaSimilarityDto';
 import { SimilarityService } from './../../_services/similarity.service';
@@ -12,7 +13,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { FormGroup,  FormBuilder,  Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, NgForm } from '@angular/forms';
 
 export interface PeriodicElement {
   name: any;
@@ -40,7 +41,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./add-idea.component.css'],
   providers: [MessageService]
 })
-export class AddIdeaComponent implements OnInit, AfterViewInit {
+export class AddIdeaComponent implements OnInit, AfterViewInit, HasUnsavedData {
   addIdeaInfoDto: AddIdeaInfoDto = {} as AddIdeaInfoDto;
   addIdeaSimilarityDto: AddIdeaSimilarityDto = {} as AddIdeaSimilarityDto;
   similarIdeas: IdeaSimilarityDto[] = [] as IdeaSimilarityDto[];
@@ -57,8 +58,14 @@ export class AddIdeaComponent implements OnInit, AfterViewInit {
     { text: 'Imported', selected: false },
   ];
 
-  savings: number = 0;
-  expenses: number = 0;
+  isOtherCategoryDisplayed: boolean = false;
+  otherCategoryTitle: string;
+
+  plannedSavings: number = 0;
+  plannedExpenses: number = 0;
+
+  actualSavings: number = 0;
+  actualExpenses: number = 0;
 
   isDescriptionEditorTouched: boolean = false;
   isSubmissionButtonClicked: boolean = false;
@@ -81,6 +88,11 @@ export class AddIdeaComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.loadIdeaInfo();
+    this.model.isAssociateResponsible = true;
+  }
+
+  hasUnsavedData(): boolean {
+    return this.submitForm.dirty;
   }
 
   createForm() {
@@ -97,6 +109,7 @@ export class AddIdeaComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource(ELEMENT_DATA);
 
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('submitIdeaForm') submitForm: NgForm;
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
@@ -113,7 +126,11 @@ export class AddIdeaComponent implements OnInit, AfterViewInit {
 
   scroll(el: HTMLElement) {
     el.scrollIntoView({behavior: 'smooth'});
-}
+  }
+
+  redirectToHome() {
+    this.router.navigate(['home']);
+  }
 
   selectCategory(category) {
     category.selected = !category.selected;
@@ -132,6 +149,21 @@ export class AddIdeaComponent implements OnInit, AfterViewInit {
       bonus = 0;
     }
     return bonus;
+  }
+
+  selectOtherCategory() {
+    this.isOtherCategoryDisplayed = !this.isOtherCategoryDisplayed;
+  }
+
+  addOtherCategory() {
+    if (this.otherCategoryTitle === undefined || this.otherCategoryTitle === "") {
+      this.messageService.add({severity:'error', summary:'The category cannot be empty!'});
+    } else {
+      let newCategory = {text: this.otherCategoryTitle, selected: true }
+      this.selectedCategories.push(newCategory);
+    }
+    this.otherCategoryTitle = "";
+    this.isOtherCategoryDisplayed = false;
   }
 
   removeAttachment(attachment: File) {
@@ -204,14 +236,16 @@ export class AddIdeaComponent implements OnInit, AfterViewInit {
       this.model.attachments.push(currentAttachment);
     }
     this.model.financialReport = {} as FinancialReport;
-    this.model.financialReport.plannedSavings = this.savings as number;
-    this.model.financialReport.plannedExpenses = this.expenses as number;
+    this.model.financialReport.plannedSavings = this.plannedSavings as number;
+    this.model.financialReport.plannedExpenses = this.plannedExpenses as number;
+    this.model.financialReport.actualSavings = this.actualSavings as number;
+    this.model.financialReport.actualExpenses = this.actualExpenses as number;
     this.model.financialReport.uploadedAt = new Date();
     this.model.financialReport.modifiedAt = new Date();
-    console.log(this.model.financialReport);
     this.model.isIdeaSavingMoney = false;
 
     this.ideaService.addIdea(this.addIdeaInfoDto.id, this.model).subscribe(() => {
+      this.submitForm.form.markAsPristine();
       this.router.navigate(['ideas/my-ideas']);
     },
     error => {

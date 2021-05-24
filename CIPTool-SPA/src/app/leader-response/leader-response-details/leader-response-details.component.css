@@ -1,5 +1,5 @@
 body {
-  background-color:  #DFDFE0;
+  background-color: #EFEFF0;
   height: auto;
 }
 
@@ -7,8 +7,17 @@ body {
   padding: 150px 0 50px 0;
 }
 
+.details-container {
+  padding: 150px 0 50px 0;
+}
+
+.description-container {
+  border: 1px solid #D4D7DA;
+  padding: 0 15px;
+}
+
 .info-section-body {
-  background-color:#EFEFF0;
+  background-color:#fbfbfb;
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -65,15 +74,16 @@ body {
 }
 
 .section-body {
-  background-color:#EFEFF0;
+  background-color:#fbfbfb;
   padding: 10px;
 }
 
 .group-box {
   background-color: white !important;
   width: 30%;
-  padding: 20px 20px;
+  padding: 20px 10px 20px 10px;
   margin: 20px;
+  border: 0.5px solid #D4D7DA;
 }
 
   .group-box.timeline {
@@ -86,7 +96,7 @@ body {
   .group-box.summary {
     background-color: white !important;
     width: 100%;
-    padding: 20px 20px;
+    padding: 20px 10px;
     margin: 20px;
   }
 
@@ -117,7 +127,7 @@ body {
     background-color: white !important;
     width: 63%;
     padding: 20px 20px;
-    margin: 20px 10px 20px 30px;
+    margin: 20px 10px 20px 10px;
   }
 
 .group-box-horizontal {
@@ -125,6 +135,7 @@ body {
     height: 80px;
     padding: 10px 15px;
     margin: 20px;
+    border: 0.5px solid #D4D7DA;
 }
 
 .horizontal-text-box {
@@ -173,9 +184,10 @@ button.not-selected {
 
 .idea-description-box {
   background-color: white;
-  padding: 20px 20px 40px 20px;
+  padding: 20px 10px 40px 20px;
   margin: 0 0 0 20px;
   width: 60%;
+  border: 0.5px solid #D4D7DA;
 }
 
 #idea-description-label {
@@ -186,12 +198,13 @@ button.not-selected {
   background-color: white !important;
   width: 100%;
   padding: 20px 10px;
+  border: 0.5px solid #D4D7DA;
 }
 
 .idea-description-right-column {
-  background-color: #EFEFF0 !important;
-  width: 33%;
-  margin: 0 20px 0 40px;
+  background-color: #fbfbfb !important;
+  width: 34%;
+  margin: 0 20px 0 20px;
 }
 
 .mat-icon {

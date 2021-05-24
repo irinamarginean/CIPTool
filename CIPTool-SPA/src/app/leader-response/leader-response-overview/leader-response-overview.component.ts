@@ -28,7 +28,7 @@ export class LeaderResponseOverviewComponent implements OnInit {
     this.ideaService.getLeaderIdeasByUsername(this.authService.getUsername()).subscribe(leaderResponseDto => {
       this.waitingForApprovalIdeas = leaderResponseDto.waitingForApprovalIdeasOverview
         .filter(x => x.status === 0)
-        .sort((a, b) => +new Date(b.modifiedAt) - +new Date(a.modifiedAt));
+        .sort((a, b) => +new Date(b.planDate) - +new Date(a.planDate));
       this.leaderResponses = leaderResponseDto.waitingForApprovalIdeasOverview
         .filter(x => x.status !== 0)
         .sort((a, b) => +new Date(b.leaderResponseAt) - +new Date(a.leaderResponseAt));

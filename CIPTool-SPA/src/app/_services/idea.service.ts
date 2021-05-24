@@ -1,3 +1,4 @@
+import { EditIdeaDto } from './../_models/editIdeaDto';
 import { LeaderResponse } from './../_models/leaderResponse';
 import { IdeaDetails } from './../_models/ideaDetails';
 import { IdeaSummary } from './../_models/ideaSummary';
@@ -21,6 +22,10 @@ export class IdeaService {
 
   addIdea(id: string, idea: Idea): Observable<Idea> {
     return this.httpClient.post<Idea>(this.baseUrl + 'add/' +  id, idea);
+  }
+
+  updateIdea(id: string, idea: EditIdeaDto): Observable<EditIdeaDto> {
+    return this.httpClient.put<EditIdeaDto>(this.baseUrl + 'edit/' +  id, idea);
   }
 
   getIdeasByUsername(username: string): Observable<IdeaSummary[]> {

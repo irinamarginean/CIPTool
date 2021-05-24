@@ -49,6 +49,7 @@ import { LeaderResponseDetailsComponent } from './leader-response/leader-respons
 import { IdeaDetailsComponent } from './ideas/idea-details/idea-details.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { EditComponent } from './ideas/edit/edit.component';
+import { HasUnsavedDataGuard } from './_guards/hasUnsavedDataGuard';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -110,6 +111,7 @@ export function tokenGetter() {
     StatisticsService,
     NavbarService,
     NavigateAwayFromLoginDeactivatorService,
+    HasUnsavedDataGuard,
     // { provide: HTTP_INTERCEPTORS, useClass: WinAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],

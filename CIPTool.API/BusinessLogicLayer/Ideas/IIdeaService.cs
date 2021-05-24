@@ -20,5 +20,6 @@ namespace BusinessLogicLayer.Ideas
         Task SaveLeaderResponse(IdeaEntity idea, LeaderResponseDto leaderResponseDto);
         Task<Attachment> GetFileById(IdeaEntity idea, string fileId);
         Task<Attachment> GetFileByFilename(IdeaEntity idea, string filename);
+        Task AddAttachment(ICollection<Attachment> attachmentsToAdd);
     }
 }

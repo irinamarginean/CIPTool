@@ -184,6 +184,18 @@ export class AppComponent {
       ).addSvgIcon(
         'document-arrow-down',
         this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/document-arrow-down.svg')
+      ).addSvgIcon(
+        'square-add',
+        this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/square-add.svg')
+      ).addSvgIcon(
+        'registration',
+        this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/registration.svg')
+      ).addSvgIcon(
+        'close-blue',
+        this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/close-blue.svg')
+      ).addSvgIcon(
+        'save',
+        this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/save.svg')
       )
   }
 
