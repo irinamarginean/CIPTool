@@ -1,3 +1,4 @@
+import { UserOverviewDto } from './userOverviewDto';
 import { Attachment } from './attachment';
 import { FinancialReport } from './financialReport';
 
@@ -20,6 +21,7 @@ export interface Idea {
   isAssociateResponsible: boolean;
   isIdeaSavingMoney: boolean;
   associateName: string;
+  implementationResponsible: UserOverviewDto;
   financialReport: FinancialReport;
   categories: Array<string>;
   attachments: Array<Attachment>;

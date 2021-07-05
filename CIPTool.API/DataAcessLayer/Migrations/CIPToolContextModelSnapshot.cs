@@ -306,6 +306,9 @@ namespace DataAcessLayer.Migrations
                     b.Property<DateTime?>("PlanDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ResponsibleId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ReviewerId")
                         .HasColumnType("nvarchar(450)");
 
@@ -324,6 +327,8 @@ namespace DataAcessLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AssociateId");
+
+                    b.HasIndex("ResponsibleId");
 
                     b.HasIndex("ReviewerId");
 
@@ -663,11 +668,17 @@ namespace DataAcessLayer.Migrations
                         .WithMany("Ideas")
                         .HasForeignKey("AssociateId");
 
+                    b.HasOne("BusinessObjectLayer.Entities.Associate", "Responsible")
+                        .WithMany()
+                        .HasForeignKey("ResponsibleId");
+
                     b.HasOne("BusinessObjectLayer.Entities.Associate", "Reviewer")
                         .WithMany()
                         .HasForeignKey("ReviewerId");
 
                     b.Navigation("Associate");
+
+                    b.Navigation("Responsible");
 
                     b.Navigation("Reviewer");
                 });

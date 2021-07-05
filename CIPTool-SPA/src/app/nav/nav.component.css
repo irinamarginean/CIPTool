@@ -26,6 +26,7 @@ nav {
 
   .nav-link.user:hover {
     color: black !important;
+    cursor: pointer;
   }
 
 .nav-link-active {

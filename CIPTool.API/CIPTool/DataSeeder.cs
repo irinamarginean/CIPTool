@@ -3,14 +3,35 @@ using BusinessObjectLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace CIPTool
 {
-    public class DataSeeder
+    public static class DataSeeder
     {
+        public static IHost MigrateDatabase<T>(this IHost webHost) where T : DbContext
+        {
+            using (var scope = webHost.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var db = services.GetRequiredService<T>();
+                    db.Database.Migrate();
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred while migrating the database.");
+                }
+            }
+            return webHost;
+        }
+
         public static async Task InitializeAsync(IServiceProvider services)
         {
             var roleManager = services
@@ -48,6 +69,30 @@ namespace CIPTool
                     testHeadOfDepartment, "Pas$1234");
                 await userManager.AddToRoleAsync(
                     testHeadOfDepartment, Constants.LeaderRole);
+            }
+
+            var testHeadOfDepartment2 = await userManager.Users
+               .Where(x => x.UserName == "grrzwzl")
+               .SingleOrDefaultAsync();
+
+            if (testHeadOfDepartment2 == null)
+            {
+                testHeadOfDepartment2 = new Leader
+                {
+                    UserName = "grrzwzl",
+                    FirstName = "Rinaldo",
+                    LastName = "Greiner",
+                    DisplayName = "Greiner Rinaldo (RBRO/ESA RBRO/PJ-PE)",
+                    Group = "ESA PJ-PE",
+                    Department = "ESA PJ-PE",
+                    Email = "Rinaldo.Greiner@de.bosch.com",
+                    IsLeader = true
+                };
+
+                await userManager.CreateAsync(
+                    testHeadOfDepartment2, "Pas$1234");
+                await userManager.AddToRoleAsync(
+                    testHeadOfDepartment2, Constants.LeaderRole);
             }
 
             var testLeader = await userManager.Users
@@ -112,6 +157,7 @@ namespace CIPTool
                     LastName = "Domnar",
                     Group = "PJ-PE",
                     Department = "PJ-PE",
+                    Leader = testHeadOfDepartment2 as Leader,
                     DisplayName = "Domnar Vlad-Ilie (RBRO/PJ-PE)",
                     Email = "Vlad-Ilie.Domnar@ro.bosch.com"
                 };

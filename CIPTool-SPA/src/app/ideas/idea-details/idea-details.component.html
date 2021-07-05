@@ -26,6 +26,10 @@
               <mat-icon svgIcon="flag"></mat-icon>Implemented
             </p>
           </span>
+          <button *ngIf="this.authService.isAdmin()" class="review-button" (click)="setCurrentUserAsReviewer(this.model?.id)">
+            <mat-icon svgIcon="replace"></mat-icon>
+            Review idea
+          </button>
         </div>
       </div>
       <div class="row section-body">

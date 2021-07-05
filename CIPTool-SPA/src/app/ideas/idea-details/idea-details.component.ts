@@ -159,4 +159,14 @@ export class IdeaDetailsComponent implements OnInit {
     }
     return bonus;
   }
+
+  setCurrentUserAsReviewer(ideaId) {
+    let currentUsername = this.authService.getUsername();
+    return this.ideaService.updateReviewer(ideaId, currentUsername).subscribe(() => {
+      this.router.navigate(['leader-response']);
+    },
+    error => {
+      console.log(error);
+    });
+  }
 }

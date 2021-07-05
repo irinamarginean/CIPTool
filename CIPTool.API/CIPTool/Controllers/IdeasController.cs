@@ -1,11 +1,12 @@
 ﻿using AspNetCore.Email;
-using AutoMapper;
 using BusinessLogicLayer.FinancialReports;
 using BusinessLogicLayer.Ideas;
+using BusinessLogicLayer.User;
 using BusinessObjectLayer;
 using BusinessObjectLayer.Dtos;
 using BusinessObjectLayer.Entities;
 using DataAcessLayer.Repositories;
+using DataAcessLayer.Repositories.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,28 +30,25 @@ namespace CIPTool.Controllers
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly IEmailSender emailSender;
         private readonly IIdeaService ideaService;
-        private readonly UserRepository userRepository;
+        private readonly IUserService userService;
         private readonly IFinancialReportService financialReportService;
-        private readonly IMapper mapper;
 
         public IdeasController(
             IIdeaService ideaService,
             IFinancialReportService financialReportService,
             IEmailSender emailSender,
-            UserRepository userRepository,
+            IUserService userService,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            RoleManager<IdentityRole> roleManager,
-            IMapper mapper)
+            RoleManager<IdentityRole> roleManager)
         {
             this.ideaService = ideaService;
             this.financialReportService = financialReportService;
-            this.userRepository = userRepository;
+            this.userService = userService;
             this.emailSender = emailSender;
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
-            this.mapper = mapper;
         }
 
         [HttpGet("all")]
@@ -70,7 +68,8 @@ namespace CIPTool.Controllers
                     ModifiedAt = idea.ModifiedAt,
                     ActualImplementationDate = idea.ActDate,
                     AssociateName = idea.Associate.DisplayName,
-                    ReviewerName = idea.Associate.Leader.DisplayName,
+                    ReviewerName = idea.Associate.Leader?.DisplayName,
+                    ResponsibleName = idea.Responsible?.DisplayName,
                     LeaderResponseAt = idea.LeaderResponses.OrderByDescending(x => x.LeaderResponseDate).Select(x => x.LeaderResponseDate).FirstOrDefault(),
                     FinancialReport = new FinancialReportDto
                     {
@@ -109,7 +108,8 @@ namespace CIPTool.Controllers
                     ActualImplementationDate = idea.ActDate,
                     LeaderResponseAt = idea.LeaderResponses.OrderByDescending(x => x.LeaderResponseDate).Select(x => x.LeaderResponseDate).FirstOrDefault(),
                     AssociateName = idea.Associate.DisplayName,
-                    ReviewerName = idea.Associate.Leader.DisplayName,
+                    ReviewerName = idea.Associate.Leader?.DisplayName,
+                    ResponsibleName = idea.Responsible?.DisplayName,
                     Categories = idea.Categories.Select(x => x.Text).ToList(),
                     FinancialReport = new FinancialReportDto
                     {
@@ -130,7 +130,7 @@ namespace CIPTool.Controllers
         [HttpGet("responses-overview/{username}")]
         public async Task<IActionResult> GetLeaderResponseOverviewByAssociate(string username)
         {
-            var reviewer = await userRepository.GetAssociate(username);
+            var reviewer = await userService.GetAssociate(username);
             var ideas = await ideaService.GetWaitingForApprovalIdeasByReviewer(reviewer);
             var waitingForApprovalIdeasDto = new List<IdeaOverviewDto>();
 
@@ -147,6 +147,7 @@ namespace CIPTool.Controllers
                     AssociateName = idea.Associate.DisplayName,
                     ReviewerName = idea.Associate.Leader.DisplayName,
                     ActualImplementationDate = idea.ActDate,
+                    ResponsibleName = idea.Responsible.DisplayName,
                     Categories = idea.Categories.Select(x => x.Text).ToList(),
                     FinancialReport = new FinancialReportDto
                     {
@@ -258,7 +259,6 @@ namespace CIPTool.Controllers
                 }).ToList()
             };
 
-
             return Ok(ideaDetailsDto);
         }
 
@@ -266,7 +266,8 @@ namespace CIPTool.Controllers
         public async Task<IActionResult> AddIdea(string id, [FromBody] AddIdeaDto addIdeaDto)
         {
             var currentUser = await GetCurrentUser();
-            var currentAssociate = await userRepository.GetAssociate(currentUser.UserName);
+            var currentAssociate = await userService.GetAssociate(currentUser.UserName);
+            var responsible = await userService.GetAssociate(addIdeaDto.ImplementationResponsible.UserName);
             var financialReport = new FinancialReportEntity
             {
                 Id = Guid.NewGuid(),
@@ -287,7 +288,7 @@ namespace CIPTool.Controllers
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
                 attachments.Add(new Attachment
-                {
+                { 
                     Id = Guid.NewGuid(),
                     FileName = attachmentDto.FileName,
                     Location = Path.Combine(pathToSave, attachmentDto.FileName),
@@ -309,9 +310,8 @@ namespace CIPTool.Controllers
                 PlanDate = DateTime.Now,
                 DoDate = addIdeaDto.DoDate,
                 AssociateId = currentAssociate.Id,
-                //Associate = currentAssociate,
                 ReviewerId = currentAssociate.Leader.Id,
-                //Reviewer = currentAssociate.Leader,
+                ResponsibleId = responsible.Id,
                 FinancialReportId = financialReport.Id,
                 FinancialReport = financialReport,
                 Attachments = attachments
@@ -546,17 +546,30 @@ namespace CIPTool.Controllers
             return BadRequest("Could not delete the file!");
         }
 
+        [HttpGet("users/all")]
+        public async Task<IActionResult> GetAllAssociates()
+        {
+            var allUsers = userManager.Users.Select(x => x as Associate).ToList();
+            var allUsersOverviewDtos = allUsers.Select(x => new UserOverviewDto
+            {
+                UserName = x.UserName,
+                DisplayName = x.DisplayName
+            }).ToList();
+
+            return Ok(allUsersOverviewDtos);
+        }
+
         private async Task<IdeaOwnerInfoDto> GenerateAddIdeaInfoDto(string username = "")
         {
             Associate associate;
             if (string.IsNullOrEmpty(username))
             {
                 var currentLoggedUser = await GetCurrentUser();
-                associate = await userRepository.GetAssociate(currentLoggedUser.UserName);
+                associate = await userService.GetAssociate(currentLoggedUser.UserName);
             }
             else
             {
-                associate = await userRepository.GetAssociate(username);
+                associate = await userService.GetAssociate(username);
             }
 
             var addIdeaInfoDto = new IdeaOwnerInfoDto
@@ -585,6 +598,22 @@ namespace CIPTool.Controllers
             }
 
             return addIdeaInfoDto;
+        }
+
+        [HttpPut("{ideaId}/update-reviewer/{username}")]
+        public async Task<IActionResult> UpdateReviwer(string ideaId, string username)
+        {
+            var idea = await ideaService.GetIdeaById(ideaId);
+            var user = await userService.GetAssociate(username);
+
+            if (idea == null) return NotFound("No such idea found in the tool.");
+            if (user == null) return NotFound("No such user found in the tool.");
+
+            idea.ReviewerId = user.Id;
+
+            await ideaService.UpdateIdea(idea);
+
+            return Ok();
         }
     }
 }

@@ -14,7 +14,7 @@ export class SimilarityService {
 
   constructor(private httpClient: HttpClient) { }
 
-  addIdea(idea: AddIdeaSimilarityDto): Observable<IdeaSimilarityDto[]> {
+  addIdea(idea: AddIdeaSimilarityDto): any {
     return this.httpClient.post<IdeaSimilarityDto[]>(this.baseUrl + 'similarity', idea);
   }
 }

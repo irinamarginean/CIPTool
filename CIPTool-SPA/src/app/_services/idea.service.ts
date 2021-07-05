@@ -1,3 +1,4 @@
+import { UserOverviewDto } from './../_models/userOverviewDto';
 import { EditIdeaDto } from './../_models/editIdeaDto';
 import { LeaderResponse } from './../_models/leaderResponse';
 import { IdeaDetails } from './../_models/ideaDetails';
@@ -36,6 +37,10 @@ export class IdeaService {
     return this.httpClient.get<IdeaSummary[]>(this.baseUrl + 'all');
   }
 
+  getAllUsers(): Observable<UserOverviewDto[]> {
+    return this.httpClient.get<UserOverviewDto[]>(this.baseUrl + 'users/all');
+  }
+
   getLeaderIdeasByUsername(username: string): Observable<LeaderResponseOverview> {
     return this.httpClient.get<LeaderResponseOverview>(this.baseUrl + 'responses-overview/' + username);
   }
@@ -63,5 +68,9 @@ export class IdeaService {
 
   removeFile(ideaId: string, fileId: string) {
     return this.httpClient.delete(this.baseUrl + 'delete-file/byFilename?ideaId=' + ideaId + '&filename=' + fileId);
+  }
+
+  updateReviewer(ideaId: string, username: string): Observable<any> {
+    return this.httpClient.put(this.baseUrl + ideaId + '/update-reviewer/' + username, null);
   }
 }

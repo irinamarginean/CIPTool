@@ -1,18 +1,16 @@
 using AspNetCore.Email;
-using AutoMapper;
 using BusinessLogicLayer.FinancialReports;
 using BusinessLogicLayer.Ideas;
 using BusinessLogicLayer.Statistics;
-using BusinessObjectLayer;
+using BusinessLogicLayer.User;
 using BusinessObjectLayer.Entities;
-using CIPTool.Helpers;
 using DataAcessLayer;
 using DataAcessLayer.Repositories;
+using DataAcessLayer.Repositories.Abstract;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
@@ -45,22 +43,15 @@ namespace CIPTool
 
             services.AddCors();
 
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new AutoMapperProfiles());
-            });
-            IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
-
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<CIPToolContext>()
                 .AddDefaultTokenProviders();
 
-            services.Configure<FormOptions>(o => {
-                o.ValueLengthLimit = int.MaxValue;
-                o.MultipartBodyLengthLimit = int.MaxValue;
-                o.MemoryBufferThreshold = int.MaxValue;
-            });
+            //services.Configure<FormOptions>(o => {
+            //    o.ValueLengthLimit = int.MaxValue;
+            //    o.MultipartBodyLengthLimit = int.MaxValue;
+            //    o.MemoryBufferThreshold = int.MaxValue;
+            //});
             services.AddHttpContextAccessor();
             services.Configure<IISServerOptions>(options =>
             {
@@ -102,16 +93,17 @@ namespace CIPTool
                 });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<UserRepository, UserRepository>();
-            services.AddScoped<IdeaRepository, IdeaRepository>();
-            services.AddScoped<BaseRepository<LeaderResponse>, LeaderResponseRepository>();
-            services.AddScoped<BaseRepository<Category>, CategoryRepository>();
-            services.AddScoped<BaseRepository<FinancialReportEntity>, FinancialReportRepository>();
-            services.AddScoped<BaseRepository<Attachment>, AttachmentRepository>();
-            services.AddScoped<BaseRepository<BonusEntity>, BonusRepository>();
-            services.AddScoped<BaseRepository<BonusRangeEntity>, BonusRangeRepository>();
-            services.AddScoped<BaseRepository<BonusCorrectionFactorEntity>, BonusCorrectionFactorRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IIdeaRepository, IdeaRepository>();
+            services.AddScoped<ILeaderResponseRepository, LeaderResponseRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IFinancialReportRepository, FinancialReportRepository>();
+            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+            services.AddScoped<IBonusRepository, BonusRepository>();
+            services.AddScoped<IBonusRangeRepository, BonusRangeRepository>();
+            services.AddScoped<IBonusCorrectionFactorRepository, BonusCorrectionFactorRepository>();
 
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIdeaService, IdeaService>();
             services.AddScoped<IFinancialReportService, FinancialReportService>();
             services.AddScoped<IStatisticsService, StatisticsService>();
@@ -122,17 +114,17 @@ namespace CIPTool
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            //if (env.IsDevelopment())
+            //{
                 app.UseDeveloperExceptionPage();
-            }
+            //}
 
             app.UseCors(x => x
               .AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader());
 
-            // app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
             {

@@ -11,18 +11,59 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { IdeaDetailsComponent } from './ideas/idea-details/idea-details.component';
 import { LeaderResponseDetailsComponent } from './leader-response/leader-response-details/leader-response-details.component';
+import { AuthGuard } from './_guards/auth.guard';
+import { RoleGuard } from './_guards/role.guard';
 
 export const appRoutes: Routes = [
-  { path: 'login', component: LoginComponent, canDeactivate: [NavigateAwayFromLoginDeactivatorService] },
-  { path: 'home', component: HomeComponent },
-  { path: 'ideas/add-idea', component: AddIdeaComponent, canDeactivate: [HasUnsavedDataGuard] },
-  { path: 'ideas/my-ideas', component: MyIdeasComponent },
-  { path: 'ideas/all-ideas', component: AllIdeasComponent },
-  { path: 'ideas/my-ideas/details/:id', component: IdeaDetailsComponent },
-  { path: 'ideas/my-ideas/edit/:id', component: EditComponent, canDeactivate: [HasUnsavedDataGuard] },
-  { path: 'ideas/all-ideas/details/:id', component: IdeaDetailsComponent },
-  { path: 'leader-response', component: LeaderResponseOverviewComponent },
-  { path: 'leader-response/details/:id', component: LeaderResponseDetailsComponent },
-  { path: 'statistics', component: StatisticsComponent },
+  { path: 'login',
+    component: LoginComponent,
+    canDeactivate: [NavigateAwayFromLoginDeactivatorService] ,
+  },
+  { path: 'home',
+    component: HomeComponent,
+    canActivate: [AuthGuard]
+  },
+  { path: 'ideas/add-idea',
+    component: AddIdeaComponent,
+    canDeactivate: [HasUnsavedDataGuard],
+    canActivate: [AuthGuard]
+  },
+  { path: 'ideas/my-ideas',
+    component: MyIdeasComponent,
+    canActivate: [AuthGuard]
+  },
+  { path: 'ideas/all-ideas',
+    component: AllIdeasComponent,
+    canActivate: [AuthGuard]
+  },
+  { path: 'ideas/my-ideas/details/:id',
+    component: IdeaDetailsComponent,
+    canActivate: [AuthGuard]
+  },
+  { path: 'ideas/my-ideas/edit/:id',
+    component: EditComponent,
+    canDeactivate: [HasUnsavedDataGuard],
+    canActivate: [AuthGuard]
+  },
+  { path: 'ideas/all-ideas/details/:id',
+    component: IdeaDetailsComponent,
+    canActivate: [AuthGuard]
+  },
+  { path: 'leader-response',
+    component: LeaderResponseOverviewComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: {
+      expectedRoles: ['Leader', 'Admin']
+  }},
+  { path: 'leader-response/details/:id',
+    component: LeaderResponseDetailsComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: {
+      expectedRoles: ['Leader', 'Admin']
+  }},
+  { path: 'statistics',
+    component: StatisticsComponent,
+    canActivate: [AuthGuard]
+  },
   { path: '**', redirectTo: 'home', pathMatch: 'full'}
 ];

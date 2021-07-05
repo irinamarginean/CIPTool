@@ -1,3 +1,5 @@
+import { environment } from './../../../environments/environment';
+import { AuthService } from './../../_services/auth.service';
 import { HasUnsavedData } from './../../_interfaces/hasUnsavedData';
 import { IdeaSimilarityDto } from './../../_models/ideaSimilarityDto';
 import { AddIdeaSimilarityDto } from './../../_models/addIdeaSimilarityDto';
@@ -14,37 +16,44 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { FormGroup, FormBuilder, Validators, FormControl, NgForm } from '@angular/forms';
+import { UserOverviewDto } from 'src/app/_models/userOverviewDto';
 
-export interface PeriodicElement {
-  name: any;
-  weight: any;
-  symbol: any;
+export interface Bonus {
+  lowerLimit: any;
+  upperLimit: any;
+  bonusValue: any;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  { name: -999999999.00, weight: 499.00, symbol: 0.00 },
-  { name: 500.00, weight: 999.00, symbol: 50.00 },
-  { name: 1000.00, weight: 1999.00, symbol: 90.00 },
-  { name: 2000.00, weight: 2999.00, symbol: 160.00 },
-  { name: 3000.00, weight: 5999.00, symbol: 210.00 },
-  { name: 6000.00, weight: 9999.00, symbol: 300.00 },
-  { name: 10000.00, weight: 19999.00, symbol: 500.00 },
-  { name: 20000.00, weight: 29999.00, symbol: 900.00 },
-  { name: 30000.00, weight: 39999.00, symbol: 1100.00 },
-  { name: 40000.00, weight: 49999.00, symbol: 1200.00 },
-  { name: 50000.00, weight: 999999999.0, symbol: 1500.00 },
+const BONUS_TABLE: Bonus[] = [
+  { lowerLimit: -999999999.00, upperLimit: 499.00, bonusValue: 0.00 },
+  { lowerLimit: 500.00, upperLimit: 999.00, bonusValue: 50.00 },
+  { lowerLimit: 1000.00, upperLimit: 1999.00, bonusValue: 90.00 },
+  { lowerLimit: 2000.00, upperLimit: 2999.00, bonusValue: 160.00 },
+  { lowerLimit: 3000.00, upperLimit: 5999.00, bonusValue: 210.00 },
+  { lowerLimit: 6000.00, upperLimit: 9999.00, bonusValue: 300.00 },
+  { lowerLimit: 10000.00, upperLimit: 19999.00, bonusValue: 500.00 },
+  { lowerLimit: 20000.00, upperLimit: 29999.00, bonusValue: 900.00 },
+  { lowerLimit: 30000.00, upperLimit: 39999.00, bonusValue: 1100.00 },
+  { lowerLimit: 40000.00, upperLimit: 49999.00, bonusValue: 1200.00 },
+  { lowerLimit: 50000.00, upperLimit: 999999999.0, bonusValue: 1500.00 },
 ];
 
 @Component({
   selector: 'app-add-idea',
   templateUrl: './add-idea.component.html',
-  styleUrls: ['./add-idea.component.css'],
+  styleUrls: ['./add-idea.component.css', './add-idea.component.scss'],
   providers: [MessageService]
 })
 export class AddIdeaComponent implements OnInit, AfterViewInit, HasUnsavedData {
   addIdeaInfoDto: AddIdeaInfoDto = {} as AddIdeaInfoDto;
   addIdeaSimilarityDto: AddIdeaSimilarityDto = {} as AddIdeaSimilarityDto;
   similarIdeas: IdeaSimilarityDto[] = [] as IdeaSimilarityDto[];
+  allUsers: UserOverviewDto[] = [] as UserOverviewDto[];
+  filteredUsers: UserOverviewDto[] = [] as UserOverviewDto[];
+
+  spaUrl = environment.spaUrl;
+
+  responsibleName: string;
 
   model: Idea = {} as Idea;
 
@@ -79,12 +88,13 @@ export class AddIdeaComponent implements OnInit, AfterViewInit, HasUnsavedData {
   fileUploadMessage: string;
   @Output() public onUploadFinished = new EventEmitter();
 
+  similarityComputationProgress: boolean = false;
   isIdeaSimilarityDialogDisplayed: boolean = false;
 
   form: FormGroup;
 
   constructor(private httpClient: HttpClient, private ideaService: IdeaService, private router: Router, private messageService: MessageService,
-              private similarityService: SimilarityService, private formBuilder: FormBuilder) { }
+              private similarityService: SimilarityService, private formBuilder: FormBuilder, private authService: AuthService) { }
 
   ngOnInit() {
     this.loadIdeaInfo();
@@ -106,7 +116,7 @@ export class AddIdeaComponent implements OnInit, AfterViewInit, HasUnsavedData {
   }
 
   displayedColumns: string[] = ['lower-bound', 'upper-bound', 'award'];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
+  dataSource = new MatTableDataSource(BONUS_TABLE);
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('submitIdeaForm') submitForm: NgForm;
@@ -122,6 +132,26 @@ export class AddIdeaComponent implements OnInit, AfterViewInit, HasUnsavedData {
         this.addIdeaInfoDto.groupLeaderName = this.addIdeaInfoDto.associateName;
       }
     });
+  }
+
+  loadAllUsers() {
+    this.ideaService.getAllUsers().subscribe(allUsersDtos => {
+      this.allUsers = allUsersDtos;
+    });
+  }
+
+  filterUsers(event) {
+    this.loadAllUsers();
+     let filtered : any[] = [];
+     let query = event.query;
+
+     for(let user of this.allUsers) {
+         if (user.userName.toLowerCase().indexOf(query.toLowerCase()) == 0  || user.displayName.toLowerCase().includes(query.toLowerCase())) {
+             filtered.push(user);
+         }
+     }
+
+     this.filteredUsers = filtered;
   }
 
   scroll(el: HTMLElement) {
@@ -144,7 +174,7 @@ export class AddIdeaComponent implements OnInit, AfterViewInit, HasUnsavedData {
     if (balance === undefined) {
       balance = 0;
     }
-    let bonus = ELEMENT_DATA.filter(x => x.name <= balance && x.weight > balance)[0]?.symbol;
+    let bonus = BONUS_TABLE.filter(x => x.lowerLimit <= balance && x.upperLimit > balance)[0]?.bonusValue;
     if (bonus === undefined) {
       bonus = 0;
     }
@@ -184,7 +214,7 @@ export class AddIdeaComponent implements OnInit, AfterViewInit, HasUnsavedData {
       return filesFormData.append('file' + index, file, file.name);
     });
 
-    this.httpClient.post('http://localhost:5000/api/ideas/upload-files/' + this.addIdeaInfoDto.id, filesFormData, { reportProgress: true, observe: 'events' })
+    this.httpClient.post(environment.apiUrl +  'ideas/upload-files/' + this.addIdeaInfoDto.id, filesFormData, { reportProgress: true, observe: 'events' })
       .subscribe(event => {
         if (event.type === HttpEventType.UploadProgress) {
           this.fileUploadProgress = Math.round(100 * event.loaded / event.total);
@@ -207,12 +237,13 @@ export class AddIdeaComponent implements OnInit, AfterViewInit, HasUnsavedData {
         categories: this.selectedCategories.filter(category => category.selected).map(category => category.text)
       };
         this.similarityService.addIdea(addIdeaSimilarityDto).subscribe((similarIdeas: IdeaSimilarityDto[]) => {
-          this.similarIdeas = similarIdeas;
+          this.similarIdeas = similarIdeas.sort((x, y) => y.similarity - x.similarity);
+          this.similarityComputationProgress = true;
       },
       error => {
         this.messageService.add({severity: 'error', summary: 'Similarity computation was unsuccessful!'});
       });
-      this.isIdeaSimilarityDialogDisplayed = true;
+        this.isIdeaSimilarityDialogDisplayed = true;
     } else {
       this.messageService.add({severity: 'error', summary: 'Mandatory fields not set!'});
     }
@@ -221,6 +252,8 @@ export class AddIdeaComponent implements OnInit, AfterViewInit, HasUnsavedData {
   hideIdeaSimilarityDialog() {
     this.isIdeaSimilarityDialogDisplayed = false;
     this.messageService.add({severity: 'warn', summary: 'Submission was cancelled!'});
+    this.similarIdeas = [];
+    this.similarityComputationProgress = false;
   }
 
   submitIdea() {
@@ -243,13 +276,21 @@ export class AddIdeaComponent implements OnInit, AfterViewInit, HasUnsavedData {
     this.model.financialReport.uploadedAt = new Date();
     this.model.financialReport.modifiedAt = new Date();
     this.model.isIdeaSavingMoney = false;
+    if (this.model.isAssociateResponsible === true) {
+      let responsible: UserOverviewDto =
+      {
+        userName: this.authService.getUsername(),
+        displayName: this.authService.getDisplayName()
+      };
+      this.model.implementationResponsible = responsible;
+    }
 
     this.ideaService.addIdea(this.addIdeaInfoDto.id, this.model).subscribe(() => {
       this.submitForm.form.markAsPristine();
       this.router.navigate(['ideas/my-ideas']);
     },
     error => {
-      this.messageService.add({severity:'error', summary:'Submission was unsuccessful!'});
+      this.messageService.add({severity: 'error', summary: 'Submission was unsuccessful!'});
     });
   }
 }

@@ -101,7 +101,7 @@ namespace BusinessLogicLayer.Statistics
                         .FirstOrDefault();
                     var decisionDateDifference = (leaderDecisionDate - x.PlanDate)?.Days;
 
-                   return decisionDateDifference < 10;
+                    return decisionDateDifference < 10;
                 });
         }
 
@@ -134,7 +134,7 @@ namespace BusinessLogicLayer.Statistics
                     var decisionDateDifference = (leaderDecisionDate - x.PlanDate)?.Days;
 
                     return decisionDateDifference > 20;
-                }); 
+                });
         }
 
         public double GetOtdImplementationValue(ICollection<IdeaEntity> allIdeas)

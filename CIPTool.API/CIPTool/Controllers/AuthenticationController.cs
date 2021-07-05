@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
 using BusinessObjectLayer.Dtos;
 using BusinessObjectLayer.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -25,7 +24,6 @@ namespace CIPTool.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration configuration;
-        private readonly IMapper mapper;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly string currentUser;
 
@@ -34,14 +32,12 @@ namespace CIPTool.Controllers
             SignInManager<IdentityUser> signInManager,
             IConfiguration configuration, 
             RoleManager<IdentityRole> roleManager,
-            IMapper mapper,
             IHttpContextAccessor httpContextAccessor)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
             this.roleManager = roleManager;
-            this.mapper = mapper;
             this.httpContextAccessor = httpContextAccessor;
             // currentUser = this.httpContextAccessor.HttpContext.User.Identity.Name[5..];
             currentUser = "";
@@ -58,7 +54,7 @@ namespace CIPTool.Controllers
             return Ok(displayName + " has logged in!");
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost("login/email")]
         public async Task<IActionResult> LoginByEmail([FromBody] EmailLoginDto model)
         {

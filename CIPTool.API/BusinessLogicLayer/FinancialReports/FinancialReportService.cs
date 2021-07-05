@@ -1,6 +1,5 @@
-﻿using BusinessObjectLayer;
-using BusinessObjectLayer.Entities;
-using DataAcessLayer.Repositories;
+﻿using BusinessObjectLayer.Entities;
+using DataAcessLayer.Repositories.Abstract;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,14 +8,14 @@ namespace BusinessLogicLayer.FinancialReports
 {
     public class FinancialReportService : IFinancialReportService
     {
-        private readonly BaseRepository<FinancialReportEntity> financialReportRepository;
-        private readonly BaseRepository<BonusRangeEntity> bonusRangeRepository;
-        private readonly BaseRepository<BonusCorrectionFactorEntity> bonusCorrectionFactorRepository;
+        private readonly IFinancialReportRepository financialReportRepository;
+        private readonly IBonusRangeRepository bonusRangeRepository;
+        private readonly IBonusCorrectionFactorRepository bonusCorrectionFactorRepository;
 
         public FinancialReportService(
-            BaseRepository<FinancialReportEntity> financialReportRepository, 
-            BaseRepository<BonusRangeEntity> bonusRangeRepository,
-            BaseRepository<BonusCorrectionFactorEntity> bonusCorrectionFactorRepository)
+            IFinancialReportRepository financialReportRepository,
+            IBonusRangeRepository bonusRangeRepository,
+            IBonusCorrectionFactorRepository bonusCorrectionFactorRepository)
         {
             this.financialReportRepository = financialReportRepository;
             this.bonusRangeRepository = bonusRangeRepository;
@@ -60,7 +59,7 @@ namespace BusinessLogicLayer.FinancialReports
                 FinancialReportId = financialReport.Id,
                 BonusCorrectionFactor = bonusCorrectionFactor,
                 BonusCorrectionFactorId = bonusCorrectionFactor.Id,
-                BonusRange = bonusRange,                
+                BonusRange = bonusRange,
                 BonusRangeId = bonusRange.Id,
                 Bonus = bonusAward
             };
@@ -70,9 +69,9 @@ namespace BusinessLogicLayer.FinancialReports
         {
             var financialReport = idea.FinancialReport;
             var bonusBalance = GetBonusBalance(idea);
-              
+
             var bonuseRanges = await bonusRangeRepository.GetAll();
-            BonusRangeEntity bonusRange = null; 
+            BonusRangeEntity bonusRange = null;
 
             bonusRange = bonuseRanges.FirstOrDefault(x => x.LowerBound <= bonusBalance && x.UpperBound > bonusBalance);
 

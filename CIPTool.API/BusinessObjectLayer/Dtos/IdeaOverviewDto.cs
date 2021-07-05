@@ -14,6 +14,7 @@ namespace BusinessObjectLayer.Dtos
         public DateTime? LeaderResponseAt { get; set; }
         public string AssociateName { get; set; }
         public string ReviewerName { get; set; }
+        public string ResponsibleName { get; set; }
         public FinancialReportDto FinancialReport { get; set; }
         public ICollection<string> Categories { get; set; }
     }

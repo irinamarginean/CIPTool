@@ -1,3 +1,5 @@
+import { AuthGuard } from './_guards/auth.guard';
+import { RoleGuard } from './_guards/role.guard';
 import { SimilarityService } from './_services/similarity.service';
 import { JwtInterceptor } from './_services/JwtInterceptor';
 import { IdeaService } from './_services/idea.service';
@@ -36,6 +38,8 @@ import { StatisticsService } from './_services/statistics.service';
 import { ChartsModule } from 'ng2-charts';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -102,7 +106,9 @@ export function tokenGetter() {
     ChartModule,
     ChartsModule,
     InputTextareaModule,
-    ProgressBarModule
+    ProgressBarModule,
+    AutoCompleteModule,
+    ProgressSpinnerModule
   ],
   providers: [
     AuthService,
@@ -112,6 +118,8 @@ export function tokenGetter() {
     NavbarService,
     NavigateAwayFromLoginDeactivatorService,
     HasUnsavedDataGuard,
+    AuthGuard,
+    RoleGuard,
     // { provide: HTTP_INTERCEPTORS, useClass: WinAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],

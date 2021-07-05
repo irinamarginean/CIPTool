@@ -10,6 +10,7 @@ export interface IdeaSummary {
   actualImplementationDate?: Date;
   associateName?: string;
   reviewerName: string;
+  responsibleName: string;
   financialReport: FinancialReportSummary;
   categories: Array<string>;
 }

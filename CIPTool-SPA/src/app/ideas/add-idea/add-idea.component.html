@@ -46,6 +46,18 @@
             </div>
           </div>
         </div>
+        <div [ngStyle]="{'display': model.isAssociateResponsible === false ? 'initial' : 'none'}" class="a-text group-box summary">
+          <label>Name of the person who is responsible for the implementation: </label>
+          <p-autoComplete [(ngModel)]="model.implementationResponsible" [suggestions]="filteredUsers" [ngModelOptions]="{standalone: true}"
+              (completeMethod)="filterUsers($event)" [minLength]="1" field="displayName"  class="user-search">
+            <ng-template let-user pTemplate="item">
+                <div>
+                    <div>{{user.displayName}}</div>
+                    <label>{{user.userName}}</label>
+                </div>
+            </ng-template>
+        </p-autoComplete>
+        </div>
       </div>
       <div class="row">
         <h1 class="section-header"><mat-icon svgIcon="summary"></mat-icon> Idea Summary</h1>
@@ -232,17 +244,17 @@
           <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
             <ng-container matColumnDef="lower-bound">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Lower Bound </th>
-              <td mat-cell *matCellDef="let element"> {{element.name}}€ </td>
+              <td mat-cell *matCellDef="let element"> {{element.lowerLimit}}€ </td>
             </ng-container>
 
             <ng-container matColumnDef="upper-bound">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Upper Bound </th>
-              <td mat-cell *matCellDef="let element"> {{element.weight}}€ </td>
+              <td mat-cell *matCellDef="let element"> {{element.upperLimit}}€ </td>
             </ng-container>
 
             <ng-container matColumnDef="award">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Award </th>
-              <td mat-cell *matCellDef="let element"> {{element.symbol}}€ </td>
+              <td mat-cell *matCellDef="let element"> {{element.bonusValue}}€ </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -250,7 +262,7 @@
               *matRowDef="let row; columns: displayedColumns;"
               [ngClass]="{'highlight': (actualSavings === undefined || actualExpenses === undefined) ?
                 0 >= row.name && 0 < row.weight :
-                (actualSavings - actualExpenses) >= row.name && (actualSavings - actualExpenses) < row.weight}">
+                (actualSavings - actualExpenses) >= row.lowerLimit && (actualSavings - actualExpenses) < row.upperLimit}">
             </tr>
           </table>
         </div>
@@ -268,17 +280,22 @@
     </form>
   </div>
   <p-toast position="bottom-right"></p-toast>
-  <p-dialog header="It looks like there are some similar ideas in this tool."
+  <p-dialog header="Similarity computation"
     [(visible)]="isIdeaSimilarityDialogDisplayed" [style]="{width: '50vw'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
     <div>
-      <div *ngFor="let similarIdea of similarIdeas">
+      <div *ngIf="this.similarityComputationProgress === false"><p-progressSpinner></p-progressSpinner></div>
+      <div *ngIf="this.similarityComputationProgress === true && similarIdeas?.length === 0">No similar ideas found</div>
+      <div *ngIf="this.similarityComputationProgress === true && similarIdeas?.length > 0">
+        <div class="similar-ideas-subtitle">It looks like there are some similar ideas in this tool</div>
+        <div *ngFor="let similarIdea of similarIdeas">
           <div class="a-text-field">
             <mat-icon *ngIf="similarIdea.similarity < 70" svgIcon="alert-warning"></mat-icon>
             <mat-icon *ngIf="similarIdea.similarity >= 70" svgIcon="alert-error"></mat-icon>
-            <a href="http://localhost:4200/ideas/all-ideas/details/{{similarIdea.id.toLowerCase()}}">{{similarIdea.title}}</a>
+            <a href="{{baseUrl}}ideas/all-ideas/details/{{similarIdea.id.toLowerCase()}}">{{similarIdea.title}}</a>
             is {{similarIdea.similarity | number: '1.2-2'}}% similar to your idea
           </div>
         </div>
+      </div>
     </div>
     <div class="similarity-dialog__footer">Are you sure you want to proceed?</div>
     <p-footer>

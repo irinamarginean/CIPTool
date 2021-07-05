@@ -56,6 +56,8 @@
     <Compile Include="Migrations\20210328144232_RemovedUnusedEntities.Designer.cs" />
     <Compile Include="Migrations\20210328144853_AddedAssociateEntityInLeaderResponse.cs" />
     <Compile Include="Migrations\20210328144853_AddedAssociateEntityInLeaderResponse.Designer.cs" />
+    <Compile Include="Migrations\20210524133910_AddedResponsibleForImplementationInIdeaTable.cs" />
+    <Compile Include="Migrations\20210524133910_AddedResponsibleForImplementationInIdeaTable.Designer.cs" />
     <Compile Include="Migrations\CIPToolContextModelSnapshot.cs" />
   </ItemGroup>
 

@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using DataAcessLayer.Repositories.Abstract;
 
 namespace DataAcessLayer.Repositories
 {
-    public sealed class IdeaRepository : BaseRepository<IdeaEntity>
+    public sealed class IdeaRepository : BaseRepository<IdeaEntity>, IIdeaRepository
     {
         private readonly CIPToolContext dataContext;
 
@@ -20,6 +21,7 @@ namespace DataAcessLayer.Repositories
             return dataContext.Ideas
                 .Include(x => x.Associate)
                     .ThenInclude(x => x.Leader)
+                .Include(x => x.Responsible)
                 .Include(x => x.FinancialReport)
                     .ThenInclude(x => x.Bonus)
                 .Include(x => x.Categories)
@@ -30,7 +32,6 @@ namespace DataAcessLayer.Repositories
 
         public async Task AddLeaderResponse(IdeaEntity ideaToUpdate, LeaderResponse leaderResponse)
         {
-            //var idea = dataContext.Ideas.Include(x => x.LeaderResponses).Where(x => x.Id == ideaToUpdate.Id).FirstOrDefault();
             var reviewer = dataContext.Users.Where(x => x.UserName == leaderResponse.ReviewerId).FirstOrDefault() as Associate;
 
             dataContext.Entry(ideaToUpdate.Associate).State = EntityState.Unchanged;

@@ -13,6 +13,7 @@ namespace BusinessObjectLayer.Dtos
         public DateTime DoDate { get; set; }
         public bool IsAssociateResponsible { get; set; }
         public bool IsIdeaSavingMoney { get; set; }
+        public UserOverviewDto ImplementationResponsible { get; set; }
         public AddIdeaFinancialReportDto FinancialReport { get; set; }
         public List<string> Categories { get; set; }
         public List<IdeaAttachmentsDto> Attachments { get; set; }

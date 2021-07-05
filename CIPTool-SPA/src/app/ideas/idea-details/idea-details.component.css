@@ -242,6 +242,24 @@ button.not-selected {
     vertical-align: initial;
   }
 
+  .review-button {
+    outline: 0;
+    background: #004768;
+    width: auto;
+    border: 0;
+    font-size: medium;
+    padding: 10px 5px;
+    color: #FFFFFF;
+    cursor: pointer;
+    float: right;
+  }
+
+  .review-button .mat-icon {
+      transform: scale(1.3)!important;
+      width: 50px;
+      vertical-align: initial;
+    }
+
 .attachments-header {
   margin: 0 0 20px 10px;
 }

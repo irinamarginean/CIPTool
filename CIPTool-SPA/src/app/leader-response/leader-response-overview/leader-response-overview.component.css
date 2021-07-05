@@ -46,14 +46,6 @@ th:nth-child(1) {
     width: 12%;
   }
 
-  th:nth-child(5) {
-    width: 10%;
-  }
-
-  th:nth-child(6) {
-    width: 10%;
-  }
-
 tr {
   border-bottom: solid #D4D7DA 0.5px;
 }

@@ -1,11 +1,12 @@
 ﻿using BusinessObjectLayer.Entities;
+using DataAcessLayer.Repositories.Abstract;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataAcessLayer.Repositories
 {
-    public sealed class UserRepository : BaseRepository<Associate>
+    public sealed class UserRepository : BaseRepository<Associate>, IUserRepository
     {
         private readonly CIPToolContext dataContext;
 

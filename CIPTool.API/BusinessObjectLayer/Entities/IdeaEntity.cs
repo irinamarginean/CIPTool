@@ -25,6 +25,8 @@ namespace BusinessObjectLayer.Entities
         public Associate Associate { get; set; }
         public string ReviewerId { get; set; }
         public Associate Reviewer { get; set; }
+        public string ResponsibleId { get; set; }
+        public Associate Responsible { get; set; }
         public Guid? FinancialReportId { get; set; }
         public FinancialReportEntity FinancialReport { get; set; }
         public ICollection<LeaderResponse> LeaderResponses { get; set; }

@@ -45,6 +45,10 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
+  getDecodedToken() {
+    return this.jwtHelper.decodeToken(localStorage.getItem('token'));
+  }
+
   getDisplayName(): string {
     if (this.getToken()) {
       return this.jwtHelper.decodeToken(this.getToken())['sub'];

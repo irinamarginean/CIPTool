@@ -10,7 +10,6 @@ import urllib
 from sentence_transformers import SentenceTransformer, util
 from flask_cors import CORS
 
-
 model = SentenceTransformer('paraphrase-distilroberta-base-v1')
 api = Flask(__name__)
 CORS(api)
@@ -57,6 +56,7 @@ def all_ideas():
 
 
 Base = declarative_base()
+
 
 class Idea(Base):
     __tablename__ = 'Ideas'
@@ -110,9 +110,9 @@ def all_ideas_sql2():
     all_results = [(dict(row.items())) for row in results]
 
     for idea in all_results:
-        current_categories_query = session.query(Category)\
-            .select_from(Category)\
-            .join(CategoryIdeaEntity)\
+        current_categories_query = session.query(Category) \
+            .select_from(Category) \
+            .join(CategoryIdeaEntity) \
             .filter(CategoryIdeaEntity.IdeasId == idea['Id'])
         current_categories = list(dict(connection.execute(current_categories_query.statement).fetchall()).values())
         idea['Categories'] = current_categories
@@ -134,7 +134,7 @@ def all_categories():
     return json_data
 
 
-@api.route('/similarity',  methods=['POST'])
+@api.route('/similarity', methods=['POST'])
 def get_idea_similarities():
     new_idea = request.get_json()
 
@@ -176,7 +176,6 @@ def get_idea_similarities():
     embeddings_new_title = model.encode(new_idea_title_list, convert_to_tensor=True)
     embeddings_title = model.encode(ideas_titles, convert_to_tensor=True)
 
-
     # Compute embedding for both lists (current context)
     embeddings_new_context = model.encode(new_idea_context_list, convert_to_tensor=True)
     embeddings_context = model.encode(ideas_context, convert_to_tensor=True)
@@ -212,11 +211,14 @@ def get_idea_similarities():
         similarity_percentage_title = (1 - cosine_title) / 2 if cosine_title < 0 else cosine_title
         similarity_percentage_context = (1 - cosine_context) / 2 if cosine_context < 0 else cosine_context
         similarity_percentage_target = (1 - cosine_target) / 2 if cosine_target < 0 else cosine_target
-        similarity_percentage_description = (1 - cosine_description) / 2 if cosine_description < 0 else cosine_description
+        similarity_percentage_description = (
+                                                    1 - cosine_description) / 2 if cosine_description < 0 else cosine_description
         similarity_percentage_categories = (1 - cosine_categories) / 2 if cosine_categories < 0 else cosine_categories
 
-        similarity_percentage = float(similarity_percentage_title) * 0.15 + float(similarity_percentage_context) * 0.15 + \
-                                float(similarity_percentage_target) * 0.25 + float(similarity_percentage_description) * 0.3 + \
+        similarity_percentage = float(similarity_percentage_title) * 0.15 + float(
+            similarity_percentage_context) * 0.15 + \
+                                float(similarity_percentage_target) * 0.25 + float(
+            similarity_percentage_description) * 0.3 + \
                                 float(similarity_percentage_categories) * 0.15
 
         idea = {

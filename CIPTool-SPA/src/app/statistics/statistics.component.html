@@ -91,12 +91,12 @@
       </div>
       <div class="pie-charts-section">
         <div class="pie-chart-section">
-          <div class="otd-title">OTD Decision <span class="otd-percentage">{{this.ideaStatistics?.otdDecisionValue}}%</span></div>
+          <div class="otd-title">OTD Decision <span class="otd-percentage">{{this.ideaStatistics?.otdDecisionValue | number : '1.2-2'}}%</span></div>
           <div class="subtitle">Leader decision date - Idea registration date</div>
           <p-chart type="pie" [data]="otdDecisionData" [options]="registeredApprovedOptions" width="35vw" height="25vh"></p-chart>
         </div>
         <div class="pie-chart-section">
-          <div class="otd-title">OTD Implementation <span class="otd-percentage">{{this.ideaStatistics?.otdImplementationValue}}%</span></div>
+          <div class="otd-title">OTD Implementation <span class="otd-percentage">{{this.ideaStatistics?.otdImplementationValue | number : '1.2-2'}}%</span></div>
           <div class="subtitle">Actual implementation date - Planned implementation date</div>
           <p-chart type="pie" [data]="otdImplementationData" [options]="registeredApprovedOptions" width="35vw" height="25vh"></p-chart>
         </div>

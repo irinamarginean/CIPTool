@@ -1,6 +1,7 @@
 ﻿using BusinessObjectLayer.Dtos;
 using BusinessObjectLayer.Entities;
 using DataAcessLayer.Repositories;
+using DataAcessLayer.Repositories.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +11,16 @@ namespace BusinessLogicLayer.Ideas
 {
     public class IdeaService : IIdeaService
     {
-        private readonly IdeaRepository ideaRepository;
-        private readonly BaseRepository<Category> categoryRepository;
-        private readonly BaseRepository<LeaderResponse> leaderResponseRepository;
-        private readonly BaseRepository<Attachment> attachmentRepository;
+        private readonly IIdeaRepository ideaRepository;
+        private readonly ICategoryRepository categoryRepository;
+        private readonly ILeaderResponseRepository leaderResponseRepository;
+        private readonly IAttachmentRepository attachmentRepository;
 
         public IdeaService(
-            IdeaRepository ideaRepository, 
-            BaseRepository<Category> categoryRepository, 
-            BaseRepository<LeaderResponse> leaderResponseRepository,
-            BaseRepository<Attachment> attachmentRepository)
+            IIdeaRepository ideaRepository,
+            ICategoryRepository categoryRepository,
+            ILeaderResponseRepository leaderResponseRepository,
+            IAttachmentRepository attachmentRepository)
         {
             this.ideaRepository = ideaRepository;
             this.categoryRepository = categoryRepository;
@@ -43,7 +44,7 @@ namespace BusinessLogicLayer.Ideas
         {
             var ideas = await ideaRepository.GetAll();
 
-            return ideas.Where(x => x.Associate.UserName == username).ToList();
+            return ideas.Where(x => x.Associate.UserName == username || x.Responsible.UserName == username).ToList();
         }
 
         public async Task AddIdea(IdeaEntity idea)
