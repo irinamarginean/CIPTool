@@ -36,5 +36,6 @@ export class MyIdeasComponent implements OnInit {
   showFinancialReportDialog(financialReport: FinancialReportSummary) {
     this.financialReport = financialReport;
     this.isFinancialReportDisplayed = true;
+    // comment
   }
 }
