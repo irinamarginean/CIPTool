@@ -1,0 +1,20 @@
+{
+  "name": "icon",
+  "default": {
+    "name": "single icon",
+    "iconName": "emoji-happy",
+    "titleText": "Lorem Ipsum"
+  },
+  "variants": [
+    {
+      "name": "ui icons",
+      "titleText": "Lorem Ipsum",
+      "demonstrator": "uiIconsDemonstrator"
+    },
+    {
+      "name": "all icons",
+      "titleText": "Lorem Ipsum",
+      "demonstrator": "allIconsDemonstrator"
+    }
+  ]
+}

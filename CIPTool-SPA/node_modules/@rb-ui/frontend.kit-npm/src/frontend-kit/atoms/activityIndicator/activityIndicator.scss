@@ -1,0 +1,199 @@
+// definition of animations mixin to use it with different sizes
+@mixin top-box-animation-mixin($name, $size) {
+
+  @keyframes top-box-animation-#{$name} {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+
+    12.5% {
+      transform: translate(#{$size}, 0);
+    }
+
+    24.99% {
+      background-color: var(--bosch-red-50);
+      transform: translate(0, 0);
+    }
+
+    25% {
+      background-color: var(--bosch-blue-50);
+    }
+
+    37.5% {
+      transform: translate(0, #{$size});
+    }
+
+    50% {
+      transform: translate(0, 0);
+    }
+
+    62.5% {
+      transform: translate(#{$size}, 0);
+    }
+
+
+    74.99% {
+      background-color: var(--bosch-blue-50);
+      transform: translate(0, 0);
+    }
+
+    75% {
+      background-color: var(--bosch-red-50);
+    }
+
+
+    87.5% {
+      transform: translate(0, #{$size});
+    }
+  }
+}
+
+@mixin bottom-box-animation-mixin($name, $size) {
+
+  @keyframes bottom-box-animation-#{$name} {
+    0%,
+    100% {
+      transform: translate(0, 0);
+      background-color: var(--bosch-purple-50);
+    }
+
+    12.5% {
+      transform: translate(#{$size}, 0);
+      z-index: 2;
+    }
+
+    25% {
+      transform: translate(0, 0);
+      z-index: 2;
+    }
+
+    37.5% {
+      transform: translate(0, #{$size});
+      z-index: 0;
+    }
+
+    49.99% {
+      transform: translate(0, 0);
+      z-index: 0;
+      background-color: var(--bosch-purple-50);
+    }
+
+    50% {
+      background-color: var(--bosch-green-50);
+    }
+
+    62.5% {
+      transform: translate(#{$size}, 0);
+      z-index: 2;
+    }
+
+    75% {
+      transform: translate(0, 0);
+      z-index: 2;
+    }
+
+    87.5% {
+      transform: translate(0, #{$size});
+      z-index: 0;
+    }
+
+    99.99% {
+      background-color: var(--bosch-green-50);
+    }
+  }
+}
+
+.a-activity-indicator {
+  height: rem(72px);
+  width: rem(72px);
+  position: relative;
+
+  &__top-box {
+
+    /**
+     * WARNING
+     * This animation breaks easily in IE11 and only on some machines and only some times
+     * Changes require intensive testing
+     * WARNING
+     */
+    @include top-box-animation-mixin(default, -24px);
+
+    animation-name: top-box-animation-default;
+    animation-duration: 3s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: none;
+    background-color: var(--bosch-red-50);
+    position: absolute;
+    height: calc(100% / 3);
+    width: calc(100% / 3);
+    top: calc(100% / 3);
+    left: calc(100% / 3);
+    z-index: 1;
+
+    .a-activity-indicator.-large & {
+
+      @include top-box-animation-mixin(large, -42.66px);
+
+      animation-name: top-box-animation-large;
+    }
+
+    .a-activity-indicator.-small & {
+
+      @include top-box-animation-mixin(small, -16px);
+
+      animation-name: top-box-animation-small;
+    }
+  }
+
+  &__bottom-box {
+
+    /**
+    * WARNING
+    * This animation breaks easily in IE11 and only on some machines and only some times
+    * Changes require intensive testing
+    * WARNING
+    */
+    @include bottom-box-animation-mixin(default,24px);
+
+    animation-name: bottom-box-animation-default;
+    animation-duration: 3s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: none;
+    background-color: var(--bosch-purple-50);
+    position: absolute;
+    height: calc(100% / 3);
+    width: calc(100% / 3);
+    top: calc(100% / 3);
+    left: calc(100% / 3);
+    z-index: 0;
+
+    .a-activity-indicator.-large & {
+
+      @include bottom-box-animation-mixin(large, 42.66px);
+
+      animation-name: bottom-box-animation-large;
+    }
+
+    .a-activity-indicator.-small & {
+
+      @include bottom-box-animation-mixin(small, 16px);
+
+      animation-name: bottom-box-animation-small;
+    }
+  }
+
+  &.-large {
+    height: rem(128px);
+    width: rem(128px);
+  }
+
+  &.-small {
+    height: rem(48px);
+    width: rem(48px);
+  }
+}

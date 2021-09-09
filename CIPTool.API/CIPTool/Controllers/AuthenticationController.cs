@@ -39,11 +39,11 @@ namespace CIPTool.Controllers
             this.configuration = configuration;
             this.roleManager = roleManager;
             this.httpContextAccessor = httpContextAccessor;
-            // currentUser = this.httpContextAccessor.HttpContext.User.Identity.Name[5..];
+            currentUser = this.httpContextAccessor.HttpContext.User.Identity.Name[5..];
             currentUser = "";
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("test")]
         public async Task<IActionResult> Test()
         {
@@ -70,7 +70,7 @@ namespace CIPTool.Controllers
 
                 if (result.Succeeded)
                 {
-                    var associate = userManager.Users.ToList().SingleOrDefault(r => r.Email == model.Email) as Associate;
+                    var associate = userManager.Users.ToList().SingleOrDefault(r => r.Email.Equals(model.Email, StringComparison.OrdinalIgnoreCase)) as Associate;
                     var token = await GenerateJwtToken(model.Email, associate);
 
                     return Ok(new { token });
@@ -97,7 +97,7 @@ namespace CIPTool.Controllers
 
                 if (result.Succeeded)
                 {
-                    var appUser = userManager.Users.ToList().SingleOrDefault(r => r.UserName == model.Username) as Associate;
+                    var appUser = userManager.Users.ToList().SingleOrDefault(r => r.UserName.Equals(model.Username, StringComparison.OrdinalIgnoreCase)) as Associate;
                     var token = await GenerateJwtToken(model.Username, appUser);
 
                     return Ok(new { token });

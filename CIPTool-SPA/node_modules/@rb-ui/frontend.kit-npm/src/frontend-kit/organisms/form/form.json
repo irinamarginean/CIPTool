@@ -1,0 +1,8 @@
+{
+    "name": "Form",
+    "default": {
+        "name": "Form Example",
+        "demonstrator": "exampleFormDemonstrator"
+    },
+    "variants": []
+}

@@ -1,0 +1,24 @@
+@mixin background-primary {
+  .-primary &,
+  .-floating & {
+    @content;
+  }
+}
+
+@mixin background-secondary {
+  .-secondary &,
+  .-primary .-secondary &,
+  .-floating .-secondary & {
+    @content;
+  }
+}
+
+@mixin background-tertiary {
+  .-contrast &,
+  .-primary .-contrast &,
+  .-primary .-secondary .-contrast &,
+  .-floating .-contrast &,
+  .-floating .-secondary .-contrast & {
+    @content;
+  }
+}

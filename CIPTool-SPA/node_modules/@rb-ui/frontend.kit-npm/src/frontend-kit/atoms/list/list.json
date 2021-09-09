@@ -1,0 +1,41 @@
+{
+  "name": "list",
+  "default": {
+    "name": "unordered list dotted",
+    "id": 1,
+    "listItems": [
+      "Text View standard regular Lorem ipsum dolor sit amet.",
+      "Text View standard regular Lorem ipsum dolor sit amet consetetur.",
+      "Text View standard regular Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.",
+      "Text View standard regular Lorem ipsum dolor sit amet.",
+      "Text View standard regular Lorem ipsum dolor sit amet consetetur."
+    ]
+  },
+  "variants": [
+    {
+      "name": "ordered list",
+      "id": 2,
+      "itemStyle": "num",
+      "isOrdered": true,
+      "listItems": [
+        "Text View standard regular Lorem ipsum dolor sit amet.",
+        "Text View standard regular Lorem ipsum dolor sit amet consetetur.",
+        "Text View standard regular Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.",
+        "Text View standard regular Lorem ipsum dolor sit amet.",
+        "Text View standard regular Lorem ipsum dolor sit amet consetetur."
+      ]
+    },
+    {
+      "name": "unordered list checked",
+      "id": 3,
+      "itemStyle": "check",
+      "listItems": [
+        "Text View standard regular Lorem ipsum dolor sit amet.",
+        "Text View standard regular Lorem ipsum dolor sit amet consetetur.",
+        "Text View standard regular Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.",
+        "Text View standard regular Lorem ipsum dolor sit amet.",
+        "Text View standard regular Lorem ipsum dolor sit amet consetetur."
+      ]
+    }
+  ]
+}

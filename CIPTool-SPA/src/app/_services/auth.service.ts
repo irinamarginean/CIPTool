@@ -65,7 +65,7 @@ export class AuthService {
   }
 
   isInRole(role): boolean {
-    return this.jwtHelper.decodeToken(this.getToken())['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] == role;
+    return this.jwtHelper.decodeToken(this.getToken())['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'].includes(role);
   }
 
   isLeader(): boolean {

@@ -1,0 +1,18 @@
+{
+  "name": "box",
+  "documentation": "See dialog for a usage example",
+  "default": {
+    "name": "box",
+    "width": "50vw",
+    "height": "200px"
+  },
+  "variants": [
+    {
+      "modal": true,
+      "name": "modal box",
+      "demonstrator": "modalBoxDemonstrator",
+      "dimmed": true,
+      "modalId": "modal-demo"
+    }
+  ]
+}

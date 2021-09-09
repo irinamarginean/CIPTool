@@ -1,0 +1,19 @@
+{
+  "name": "progress indicator",
+  "default": {
+    "name": "determinate progress indicator",
+    "type": "determinate",
+    "progressId": "content-progress",
+    "progress": "37"
+  },
+  "variants": [
+    {
+      "name": "indeterminate progress indicator",
+      "type": "indeterminate"
+    },
+    {
+      "name": "progress example",
+      "demonstrator": "progressExampleDemonstrator"
+    }
+  ]
+}

@@ -1,12 +1,9 @@
-﻿using AspNetCore.Email;
-using BusinessLogicLayer.FinancialReports;
+﻿using BusinessLogicLayer.FinancialReports;
 using BusinessLogicLayer.Ideas;
 using BusinessLogicLayer.User;
 using BusinessObjectLayer;
 using BusinessObjectLayer.Dtos;
 using BusinessObjectLayer.Entities;
-using DataAcessLayer.Repositories;
-using DataAcessLayer.Repositories.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +25,7 @@ namespace CIPTool.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly SignInManager<IdentityUser> signInManager;
-        private readonly IEmailSender emailSender;
+        //private readonly IEmailSender emailSender;
         private readonly IIdeaService ideaService;
         private readonly IUserService userService;
         private readonly IFinancialReportService financialReportService;
@@ -36,7 +33,7 @@ namespace CIPTool.Controllers
         public IdeasController(
             IIdeaService ideaService,
             IFinancialReportService financialReportService,
-            IEmailSender emailSender,
+            //IEmailSender emailSender,
             IUserService userService,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
@@ -45,7 +42,7 @@ namespace CIPTool.Controllers
             this.ideaService = ideaService;
             this.financialReportService = financialReportService;
             this.userService = userService;
-            this.emailSender = emailSender;
+            //this.emailSender = emailSender;
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
@@ -67,8 +64,8 @@ namespace CIPTool.Controllers
                     PlanDate = idea.PlanDate,
                     ModifiedAt = idea.ModifiedAt,
                     ActualImplementationDate = idea.ActDate,
-                    AssociateName = idea.Associate.DisplayName,
-                    ReviewerName = idea.Associate.Leader?.DisplayName,
+                    AssociateName = idea.Associate?.DisplayName,
+                    ReviewerName = idea.Reviewer?.DisplayName,
                     ResponsibleName = idea.Responsible?.DisplayName,
                     LeaderResponseAt = idea.LeaderResponses.OrderByDescending(x => x.LeaderResponseDate).Select(x => x.LeaderResponseDate).FirstOrDefault(),
                     FinancialReport = new FinancialReportDto
@@ -107,8 +104,8 @@ namespace CIPTool.Controllers
                     ModifiedAt = idea.ModifiedAt,
                     ActualImplementationDate = idea.ActDate,
                     LeaderResponseAt = idea.LeaderResponses.OrderByDescending(x => x.LeaderResponseDate).Select(x => x.LeaderResponseDate).FirstOrDefault(),
-                    AssociateName = idea.Associate.DisplayName,
-                    ReviewerName = idea.Associate.Leader?.DisplayName,
+                    AssociateName = idea.Associate?.DisplayName,
+                    ReviewerName = idea.Reviewer?.DisplayName,
                     ResponsibleName = idea.Responsible?.DisplayName,
                     Categories = idea.Categories.Select(x => x.Text).ToList(),
                     FinancialReport = new FinancialReportDto
@@ -144,10 +141,10 @@ namespace CIPTool.Controllers
                     PlanDate = idea.PlanDate,
                     ModifiedAt = idea.ModifiedAt,
                     LeaderResponseAt = idea.LeaderResponses.OrderByDescending(x => x.LeaderResponseDate).Select(x => x.LeaderResponseDate).FirstOrDefault(),
-                    AssociateName = idea.Associate.DisplayName,
-                    ReviewerName = idea.Associate.Leader.DisplayName,
+                    AssociateName = idea.Associate?.DisplayName,
+                    ReviewerName = idea.Reviewer?.DisplayName,
                     ActualImplementationDate = idea.ActDate,
-                    ResponsibleName = idea.Responsible.DisplayName,
+                    ResponsibleName = idea.Responsible?.DisplayName,
                     Categories = idea.Categories.Select(x => x.Text).ToList(),
                     FinancialReport = new FinancialReportDto
                     {
@@ -177,8 +174,8 @@ namespace CIPTool.Controllers
                     PlanDate = idea.PlanDate,
                     ModifiedAt = idea.ModifiedAt,
                     LeaderResponseAt = idea.LeaderResponses.OrderByDescending(x => x.LeaderResponseDate).Select(x => x.LeaderResponseDate).FirstOrDefault(),
-                    AssociateName = idea.Associate.DisplayName,
-                    ReviewerName = idea.Associate.Leader.DisplayName,
+                    AssociateName = idea.Associate?.DisplayName,
+                    ReviewerName = idea.Reviewer?.DisplayName,
                     Categories = idea.Categories.Select(x => x.Text).ToList(),
                     FinancialReport = new FinancialReportDto
                     {
@@ -222,7 +219,7 @@ namespace CIPTool.Controllers
                 RichTextDescription = idea.RichTextDescription,
                 Target = idea.Target,
                 Context = idea.Context,
-                ReviewerName = idea.Reviewer.DisplayName,
+                ReviewerName = idea.Reviewer?.DisplayName ?? "-",
                 Status = idea.Status,
                 PlanDate = idea.PlanDate,
                 DoDate = idea.DoDate,
@@ -310,7 +307,7 @@ namespace CIPTool.Controllers
                 PlanDate = DateTime.Now,
                 DoDate = addIdeaDto.DoDate,
                 AssociateId = currentAssociate.Id,
-                ReviewerId = currentAssociate.Leader.Id,
+                ReviewerId = currentAssociate.Leader?.Id ?? currentAssociate.Id,
                 ResponsibleId = responsible.Id,
                 FinancialReportId = financialReport.Id,
                 FinancialReport = financialReport,
@@ -325,11 +322,11 @@ namespace CIPTool.Controllers
 
             await ideaService.AddIdea(idea);
 
-            await emailSender.SendEmailAsync(
-                                    "fixed-term.Irina.Marginean@ro.bosch.com",
-                                    "Idea submission in CIP Tool\n",
-                                    "Thank you for your involvement in the Continuous Improvement Process.\n" +
-                                    "Have a nice day, \nSupport ECC CIP Tool");
+            //await emailSender.SendEmailAsync(
+            //                        "fixed-term.Irina.Marginean@ro.bosch.com",
+            //                        "Idea submission in CIP Tool\n",
+            //                        "Thank you for your involvement in the Continuous Improvement Process.\n" +
+            //                        "Have a nice day, \nSupport ECC CIP Tool");
 
             return Ok();
         }
@@ -596,6 +593,13 @@ namespace CIPTool.Controllers
                 addIdeaInfoDto.DepartmentLeaderName = $"{associate.Leader.FirstName} {associate.Leader.LastName}";
                 addIdeaInfoDto.Department = associate.Department;
             }
+            else if (!addIdeaInfoDto.IsLeader && associate.Leader.Leader == null)
+            {
+                addIdeaInfoDto.GroupLeaderName = $"{associate.Leader.FirstName} {associate.Leader.LastName}";
+                addIdeaInfoDto.Group = associate.Group;
+                addIdeaInfoDto.DepartmentLeaderName = $"{associate.Leader.FirstName} {associate.Leader.LastName}";
+                addIdeaInfoDto.Department = associate.Department;
+            }
 
             return addIdeaInfoDto;
         }
@@ -609,9 +613,7 @@ namespace CIPTool.Controllers
             if (idea == null) return NotFound("No such idea found in the tool.");
             if (user == null) return NotFound("No such user found in the tool.");
 
-            idea.ReviewerId = user.Id;
-
-            await ideaService.UpdateIdea(idea);
+            await ideaService.UpdateReviewer(idea, user.Id);
 
             return Ok();
         }

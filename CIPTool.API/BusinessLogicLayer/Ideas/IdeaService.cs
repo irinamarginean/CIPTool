@@ -1,6 +1,5 @@
 ﻿using BusinessObjectLayer.Dtos;
 using BusinessObjectLayer.Entities;
-using DataAcessLayer.Repositories;
 using DataAcessLayer.Repositories.Abstract;
 using System;
 using System.Collections.Generic;
@@ -139,6 +138,11 @@ namespace BusinessLogicLayer.Ideas
             {
                 await attachmentRepository.Insert(attachment);
             }
+        }
+
+        public async Task UpdateReviewer(IdeaEntity idea, string reviewerId)
+        {
+            await ideaRepository.UpdateReviewer(idea, reviewerId);
         }
     }
 }

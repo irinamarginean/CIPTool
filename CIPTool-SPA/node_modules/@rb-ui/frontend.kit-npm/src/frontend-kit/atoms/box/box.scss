@@ -1,0 +1,26 @@
+.a-box {
+  display: inline-block;
+}
+
+.a-box--modal {
+
+  @include background-dimmed;
+
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  display: none;
+
+  &.-show {
+    display: flex;
+  }
+}
+
+/* stylelint-disable-next-line selector-no-qualifying-type */
+body.-unscrollable {
+  overflow: hidden;
+}

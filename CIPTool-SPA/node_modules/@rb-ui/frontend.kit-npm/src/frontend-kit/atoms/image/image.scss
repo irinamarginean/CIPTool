@@ -1,0 +1,24 @@
+.a-image {
+  display: block;
+  margin: 0;
+
+  &__ratioWrapper {
+    position: relative;
+    overflow: hidden;
+    padding-top: 56.25%;
+  }
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  figcaption {
+    margin-top: rem(8px);
+    letter-spacing: 0;
+  }
+}

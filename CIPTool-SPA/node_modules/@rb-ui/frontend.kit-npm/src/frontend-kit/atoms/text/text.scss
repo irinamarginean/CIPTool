@@ -1,0 +1,21 @@
+.a-text {
+  :last-child {
+    margin-bottom: 0;
+  }
+
+  :first-child {
+    margin-top: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin: rem(40px) 0 rem(24px);
+  }
+
+  p {
+    margin: 0 0 rem(24px);
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "name": "typography",
+  "default": {
+    "name": "highlight text class",
+    "type": "highlight"
+  },
+  "variants": [
+    {
+      "name": "regular text class",
+      "type": "text"
+    },
+    {
+      "name": "quote class",
+      "type": "quote"
+    },
+    {
+      "name": "list element class",
+      "type": "list-element"
+    },
+    {
+      "name": "label element class",
+      "type": "label"
+    },
+    {
+      "name": "size 6XL modifier",
+      "size": "6xl"
+    },
+    {
+      "name": "size 5XL modifier",
+      "size": "5xl"
+    },
+    {
+      "name": "size 4XL modifier",
+      "size": "4xl"
+    },
+    {
+      "name": "size 3XL modifier",
+      "size": "3xl"
+    },
+    {
+      "name": "size 2XL modifier",
+      "size": "2xl"
+    },
+    {
+      "name": "size XL modifier",
+      "size": "xl"
+    },
+    {
+      "name": "size L modifier",
+      "size": "l"
+    },
+    {
+      "name": "size M modifier",
+      "size": "m"
+    },
+    {
+      "name": "size S modifier",
+      "size": "s"
+    },
+    {
+      "name": "default h1 tag",
+      "demonstrator": "h1Demonstrator"
+    },
+    {
+      "name": "default h2 tag",
+      "demonstrator": "h2Demonstrator"
+    },
+    {
+      "name": "default h3 tag",
+      "demonstrator": "h3Demonstrator"
+    },
+    {
+      "name": "default h4 tag",
+      "demonstrator": "h4Demonstrator"
+    },
+    {
+      "name": "default h5 tag",
+      "demonstrator": "h5Demonstrator"
+    },
+    {
+      "name": "default paragraph tag",
+      "demonstrator": "pDemonstrator"
+    },
+    {
+      "name": "default list element tag",
+      "demonstrator": "liDemonstrator"
+    },
+    {
+      "name": "default button tag",
+      "demonstrator": "buttonDemonstrator"
+    },
+    {
+      "name": "default figcaption tag",
+      "demonstrator": "figcaptionDemonstrator"
+    },
+    {
+      "name": "default label tag",
+      "demonstrator": "labelDemonstrator"
+    }
+  ]
+}

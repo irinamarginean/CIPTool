@@ -1,0 +1,55 @@
+/// Breakpoints for the different view ports
+$rb-core-breakpoints: (
+  tablet: 768px,
+  desktop: 992px,
+  large: 1200px
+);
+
+/// Up to mobile breakpoint (xs.max)
+@mixin rb-core-up-to-mobile {
+  @media only screen and (max-width: map-get($rb-core-breakpoints, tablet) - 1) {
+    @content;
+  }
+}
+
+/// Tablet breakpoint (sm.min)
+@mixin rb-core-tablet {
+  @media only screen and (min-width: map-get($rb-core-breakpoints, tablet)) {
+    @content;
+  }
+}
+
+/// Up to tablet breakpoint (sm.max)
+@mixin rb-core-up-to-tablet {
+  @media only screen and (max-width: map-get($rb-core-breakpoints, desktop) - 1) {
+    @content;
+  }
+}
+
+/// Desktop breakpoint (md.min)
+@mixin rb-core-desktop {
+  @media only screen and (min-width: map-get($rb-core-breakpoints, desktop)) {
+    @content;
+  }
+}
+
+/// Up to desktop breakpoint (md.max)
+@mixin rb-core-up-to-desktop {
+  @media only screen and (max-width: map-get($rb-core-breakpoints, large) - 1) {
+    @content;
+  }
+}
+
+/// Large breakpoint (lg.min)
+@mixin rb-core-large {
+  @media only screen and (min-width: map-get($rb-core-breakpoints, large)) {
+    @content;
+  }
+}
+
+/// Print format
+@mixin rb-core-print {
+  @media print {
+    @content;
+  }
+}

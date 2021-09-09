@@ -1,0 +1,16 @@
+{
+  "name": "activity indicator",
+  "default": {
+    "name": "default"
+  },
+  "variants": [
+    {
+      "name": "large",
+      "size": "large"
+    },
+    {
+      "name": "small",
+      "size": "small"
+    }
+  ]
+}

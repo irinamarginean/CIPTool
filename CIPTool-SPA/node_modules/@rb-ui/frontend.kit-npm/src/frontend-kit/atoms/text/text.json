@@ -1,0 +1,77 @@
+{
+  "name": "text",
+  "default": {
+    "name": "Full",
+    "content": [
+      {
+        "headline": {
+          "level": 1,
+          "content": "Headline 1 with standard style highlight-4xl"
+        },
+        "paragraph": [
+          "Paragraph text with style text-l. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.",
+          "Paragraph text with standard style text-m. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et <strong>I’m Bold et justo duo dolores et ea rebum.</strong> Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet <em>„Italic style consetetur sadipscing elitr“</em> sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+        ]
+      },
+      {
+        "headline": {
+          "level": 2,
+          "content": "Headline 2 with standard style highlight-3xl"
+        },
+        "paragraph": [
+          "Paragraph text with standard style text-m. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et <strong>I’m Bold et justo duo dolores et ea rebum.</strong> Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet <em>„Italic style consetetur sadipscing elitr“</em> sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+          "Paragraph text with standard style text-m. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam."
+        ]
+      },
+      {
+        "headline": {
+          "level": 2,
+          "content": "Headline 2 with standard style highlight-3xl"
+        }
+      },
+      {
+        "headline": {
+          "level": 3,
+          "content": "Headline 3 with standard style highlight-2xl"
+        },
+        "paragraph": [
+          "Paragraph text with standard style text-m. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam."
+        ]
+      },
+      {
+        "headline": {
+          "level": 4,
+          "content": "Headline 4 with standard style highlight-x"
+        },
+        "paragraph": [
+          "Paragraph text with standard style text-m. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam."
+        ]
+      },
+      {
+        "headline": {
+          "level": 5,
+          "content": "Headline 5 with standard style highlight-l"
+        },
+        "paragraph": [
+          "Paragraph text with style text-s. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam."
+        ]
+      }
+    ]
+  },
+  "variants": [
+    {
+      "name": "Headline 2 with standard style highlight-3xl",
+      "content": [
+        {
+          "headline": {
+            "level": 2,
+            "content": "Headline 2 with standard style highlight-3xl"
+          },
+          "paragraph": [
+            "Paragraph text with standard style text-m. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et <strong>I’m Bold et justo duo dolores et ea rebum.</strong> Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet <em>„Italic style consetetur sadipscing elitr“</em> sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+          ]
+        }
+      ]
+    }
+  ]
+}

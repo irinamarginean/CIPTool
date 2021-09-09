@@ -1,0 +1,37 @@
+{
+  "name": "page indicator",
+  "default": {
+    "name": "default",
+    "pages": 7
+  },
+  "variants": [
+    {
+      "name": "default disabled",
+      "pages": 7,
+      "disabled": true
+    },
+    {
+      "name": "numbered",
+      "pages": 7,
+      "numbered": true
+    },
+    {
+      "name": "numbered 200 pages",
+      "pages": 200,
+      "numbered": true
+    },
+    {
+      "name": "numbered 20 pages selected 5",
+      "pages": 20,
+      "selected": 5,
+      "numbered": true
+    },
+    {
+      "name": "numbered 20 pages selected 18 disabled",
+      "pages": 20,
+      "selected": 18,
+      "numbered": true,
+      "disabled": true
+    }
+  ]
+}

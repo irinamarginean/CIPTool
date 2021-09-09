@@ -1,0 +1,25 @@
+{
+  "name": "background",
+  "default": {
+    "name": "primary",
+    "type": "primary"
+  },
+  "variants": [
+    {
+      "name": "secondary",
+      "type": "secondary"
+    },
+    {
+      "name": "contrast",
+      "type": "contrast"
+    },
+    {
+      "name": "floating",
+      "type": "floating"
+    },
+    {
+      "name": "dimmed",
+      "demonstrator": "dimmedBackgroundDemonstrator"
+    }
+  ]
+}

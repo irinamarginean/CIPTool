@@ -258,11 +258,11 @@ export class StatisticsComponent implements OnInit {
   renderOTDDecisionPieChart() {
     this.otdDecisionData = {
       labels: [`< 10 days (${this.ideaStatistics.otdDecisionGreenCategoryNumber})`, `10 to 20 days (${this.ideaStatistics.otdDecisionYellowCategoryNumber})`,
-        `> 20 days (${this.ideaStatistics.otdDecisionYellowCategoryNumber})`],
+        `> 20 days (${this.ideaStatistics.otdDecisionRedCategoryNumber})`],
       datasets: [
           {
               data: [this.ideaStatistics.otdDecisionGreenCategoryNumber, this.ideaStatistics.otdDecisionYellowCategoryNumber,
-                this.ideaStatistics.otdDecisionYellowCategoryNumber],
+                this.ideaStatistics.otdDecisionRedCategoryNumber],
               backgroundColor: [
                   "#9ACE58",
                   "#FDC351",

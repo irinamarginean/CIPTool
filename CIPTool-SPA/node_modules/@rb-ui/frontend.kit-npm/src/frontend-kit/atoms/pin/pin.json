@@ -1,0 +1,67 @@
+{
+    "name": "pin",
+    "default": {
+        "name": "default pin"
+    },
+    "variants": [
+        {
+            "name": "default pin disabled",
+            "isDisabled": true
+        },
+        {
+            "name": "cluster pin",
+            "isCluster": true,
+            "clusterLabel": 186
+        },
+        {
+            "name": "cluster pin disabled",
+            "isCluster": true,
+            "isDisabled": true,
+            "clusterLabel": 186
+        },
+        {
+            "name": "default pin floating",
+            "dummyBackground": "floating"
+        },
+        {
+            "name": "default pin disabled floating",
+            "isDisabled": true,
+            "dummyBackground": "floating"
+        },
+        {
+            "name": "cluster pin floating",
+            "isCluster": true,
+            "clusterLabel": 186,
+            "dummyBackground": "floating"
+        },
+        {
+            "name": "cluster pin disabled floating",
+            "isCluster": true,
+            "isDisabled": true,
+            "clusterLabel": 186,
+            "dummyBackground": "floating"
+        },
+        {
+            "name": "default pin secondary",
+            "dummyBackground": "secondary"
+        },
+        {
+            "name": "default pin disabled secondary",
+            "isDisabled": true,
+            "dummyBackground": "secondary"
+        },
+        {
+            "name": "cluster pin secondary",
+            "isCluster": true,
+            "clusterLabel": 186,
+            "dummyBackground": "secondary"
+        },
+        {
+            "name": "cluster pin disabled secondary",
+            "isCluster": true,
+            "isDisabled": true,
+            "clusterLabel": 186,
+            "dummyBackground": "secondary"
+        }
+    ]
+}

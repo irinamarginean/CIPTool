@@ -1,0 +1,9 @@
+.-floating {
+
+  @include box-shadow;
+}
+
+.-dimmed {
+
+  @include background-dimmed;
+}

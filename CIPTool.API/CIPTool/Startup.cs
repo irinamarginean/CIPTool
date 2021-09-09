@@ -1,22 +1,21 @@
-using AspNetCore.Email;
 using BusinessLogicLayer.FinancialReports;
 using BusinessLogicLayer.Ideas;
 using BusinessLogicLayer.Statistics;
 using BusinessLogicLayer.User;
-using BusinessObjectLayer.Entities;
 using DataAcessLayer;
 using DataAcessLayer.Repositories;
 using DataAcessLayer.Repositories.Abstract;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -53,6 +52,7 @@ namespace CIPTool
             //    o.MemoryBufferThreshold = int.MaxValue;
             //});
             services.AddHttpContextAccessor();
+            services.AddControllers();
             services.Configure<IISServerOptions>(options =>
             {
                 options.MaxRequestBodySize = int.MaxValue;
@@ -63,9 +63,9 @@ namespace CIPTool
                 options.Limits.MaxRequestBodySize = int.MaxValue;
             });
 
-            //services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
-            //    .AddNegotiate();
-            //services.AddAuthentication(IISDefaults.AuthenticationScheme);
+            services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
+                .AddNegotiate();
+            services.AddAuthentication(IISDefaults.AuthenticationScheme);
             services.AddAuthentication();
             services.AddAuthorization();
 
@@ -108,7 +108,7 @@ namespace CIPTool
             services.AddScoped<IFinancialReportService, FinancialReportService>();
             services.AddScoped<IStatisticsService, StatisticsService>();
 
-            services.AddTransient<IEmailSender, Helpers.EmailSender>();
+            //services.AddTransient<IEmailSender, Helpers.EmailSender>();
         }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

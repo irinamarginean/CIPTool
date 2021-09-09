@@ -22,6 +22,7 @@ namespace DataAcessLayer.Repositories
                 .Include(x => x.Associate)
                     .ThenInclude(x => x.Leader)
                 .Include(x => x.Responsible)
+                .Include(x => x.Reviewer)
                 .Include(x => x.FinancialReport)
                     .ThenInclude(x => x.Bonus)
                 .Include(x => x.Categories)
@@ -42,6 +43,18 @@ namespace DataAcessLayer.Repositories
             leaderResponse.Reviewer = reviewer;
             dataContext.Entry(leaderResponse.Reviewer).State = EntityState.Unchanged;
             dataContext.LeaderResponses.Add(leaderResponse);
+
+            await dataContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateReviewer(IdeaEntity ideaToUpdate, string reviewerId)
+        {
+            var reviewer = dataContext.Users.Where(x => x.Id.ToLower() == reviewerId.ToLower()).FirstOrDefault() as Associate;
+
+            dataContext.Entry(ideaToUpdate.Associate).State = EntityState.Unchanged;
+            dataContext.Entry(ideaToUpdate.Reviewer).State = EntityState.Unchanged;
+            ideaToUpdate.Reviewer = reviewer;
+            dataContext.Ideas.Update(ideaToUpdate);
 
             await dataContext.SaveChangesAsync();
         }

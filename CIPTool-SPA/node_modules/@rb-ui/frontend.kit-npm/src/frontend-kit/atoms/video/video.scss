@@ -1,0 +1,15 @@
+.a-video {
+  video {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &__caption {
+
+    @include text-regular;
+    @include size-s;
+
+    margin: rem(8px) 0 0 0;
+  }
+}

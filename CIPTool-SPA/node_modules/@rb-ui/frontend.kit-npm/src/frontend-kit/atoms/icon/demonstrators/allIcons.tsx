@@ -1,0 +1,49 @@
+import * as React from 'react';
+import { Icon } from '../icon';
+import IconNames from './iconNames';
+
+let iconArrays = [];
+
+const restructureIconArray = (source: string[]): void => {
+  const slice = source.splice(0, 3);
+
+  if (slice.length > 0) {
+    iconArrays = [...iconArrays, slice];
+  }
+  if (source.length > 0) {
+    restructureIconArray(source);
+  }
+};
+
+restructureIconArray(IconNames);
+
+const AllIcons: React.FunctionComponent = () => (
+  <table>
+    <thead className="frontend-kit__table-head">
+      <tr>
+        <td>icon</td>
+        <td>name</td>
+        <td>icon</td>
+        <td>name</td>
+        <td>icon</td>
+        <td>name</td>
+      </tr>
+    </thead>
+    <tbody>
+      {iconArrays.map((iconArray: string[], index) => (
+        <tr className="frontend-kit__table-row" key={`row-${index + 1}`}>
+          {iconArray.map(name => (
+            <React.Fragment key={`icon-${name}`}>
+              <td>
+                <Icon iconName={name} titleText={name} key={name} />
+              </td>
+              <td>{name}</td>
+            </React.Fragment>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+);
+
+export default AllIcons;

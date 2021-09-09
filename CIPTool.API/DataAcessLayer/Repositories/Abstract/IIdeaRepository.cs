@@ -6,5 +6,6 @@ namespace DataAcessLayer.Repositories.Abstract
     public interface IIdeaRepository : IRepository<IdeaEntity>
     {
         Task AddLeaderResponse(IdeaEntity ideaToUpdate, LeaderResponse leaderResponse);
+        Task UpdateReviewer(IdeaEntity ideaToUpdate, string reviwerId);
     }
 }

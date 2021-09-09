@@ -146,6 +146,9 @@ def get_idea_similarities():
     results = connection.execute(query.statement).fetchall()
     all_results = [(dict(row.items())) for row in results]
 
+    if all_results.count() == 0:
+        return []
+
     for idea in all_results:
         current_categories_query = session.query(Category) \
             .select_from(Category) \

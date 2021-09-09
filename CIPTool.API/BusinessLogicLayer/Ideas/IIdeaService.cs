@@ -18,6 +18,7 @@ namespace BusinessLogicLayer.Ideas
         Task<ICollection<IdeaEntity>> GetWaitingForApprovalIdeasByReviewer(Associate reviewer);
         Task<ICollection<LeaderResponse>> GetLeaderResponsesByAssociate(Associate reviewer);
         Task SaveLeaderResponse(IdeaEntity idea, LeaderResponseDto leaderResponseDto);
+        Task UpdateReviewer(IdeaEntity idea, string reviewerId);
         Task<Attachment> GetFileById(IdeaEntity idea, string fileId);
         Task<Attachment> GetFileByFilename(IdeaEntity idea, string filename);
         Task AddAttachment(ICollection<Attachment> attachmentsToAdd);

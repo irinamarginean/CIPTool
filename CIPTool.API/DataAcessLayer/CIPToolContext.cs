@@ -21,8 +21,8 @@ namespace DataAcessLayer
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseSqlServer("server=CLJ-C-0005V;database=CIPTool;trusted_connection=true")
-                //.UseSqlServer("Server=CLJZ2230\\SQLEXPRESS,49172; Database=CIPTool_Test; Integrated Security=False; User Id=cip;Password=Pas$1234;")
+                //.UseSqlServer("server=CLJ-C-0005V;database=CIPTool;trusted_connection=true")
+                .UseSqlServer("Server=CLJZ2230\\SQLEXPRESS,49172; Database=CIPTool_Test; Integrated Security=False; User Id=cip;Password=Pas$1234;")
                 .EnableSensitiveDataLogging();
         }
 
