@@ -46,11 +46,6 @@ namespace CIPTool
                 .AddEntityFrameworkStores<CIPToolContext>()
                 .AddDefaultTokenProviders();
 
-            //services.Configure<FormOptions>(o => {
-            //    o.ValueLengthLimit = int.MaxValue;
-            //    o.MultipartBodyLengthLimit = int.MaxValue;
-            //    o.MemoryBufferThreshold = int.MaxValue;
-            //});
             services.AddHttpContextAccessor();
             services.AddControllers();
             services.Configure<IISServerOptions>(options =>
@@ -63,8 +58,8 @@ namespace CIPTool
                 options.Limits.MaxRequestBodySize = int.MaxValue;
             });
 
-            services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
-                .AddNegotiate();
+            //services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
+            //    .AddNegotiate();
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
             services.AddAuthentication();
             services.AddAuthorization();
@@ -92,7 +87,7 @@ namespace CIPTool
                     };
                 });
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IIdeaRepository, IdeaRepository>();
             services.AddScoped<ILeaderResponseRepository, LeaderResponseRepository>();

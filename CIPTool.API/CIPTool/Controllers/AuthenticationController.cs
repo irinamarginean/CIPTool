@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -24,37 +24,38 @@ namespace CIPTool.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration configuration;
-        private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly string currentUser;
+        //private readonly IHttpContextAccessor httpContextAccessor;
+        //private readonly string currentUser;
 
         public AuthenticationController(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            IConfiguration configuration, 
-            RoleManager<IdentityRole> roleManager,
-            IHttpContextAccessor httpContextAccessor)
+            IConfiguration configuration,
+            //IHttpContextAccessor httpContextAccessor,
+            RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
             this.roleManager = roleManager;
-            this.httpContextAccessor = httpContextAccessor;
-            currentUser = this.httpContextAccessor.HttpContext.User.Identity.Name[5..];
-            currentUser = "";
+            // -- WINDOWS AUTHENTICATION CREDENTIALS __ DISABLED --
+            //this.httpContextAccessor = httpContextAccessor;
+            //currentUser = this.httpContextAccessor.HttpContext.User.Identity.Name[5..];
+            //currentUser = "";
         }
 
+        // test method for the Windows Authentication
         //[Authorize]
-        [HttpGet("test")]
-        public async Task<IActionResult> Test()
-        {
-            var userId = currentUser;
+        //[HttpGet("test")]
+        //public async Task<IActionResult> Test()
+        //{
+        //    var userId = currentUser;
 
-            var displayName = LdapWrapper.GetDisplayNameByUserName(userId);
+        //    var displayName = LdapWrapper.GetDisplayNameByUserName(userId);
 
-            return Ok(displayName + " has logged in!");
-        }
+        //    return Ok(displayName + " has logged in!");
+        //}
 
-        //[Authorize]
         [HttpPost("login/email")]
         public async Task<IActionResult> LoginByEmail([FromBody] EmailLoginDto model)
         {
@@ -110,29 +111,30 @@ namespace CIPTool.Controllers
             return NotFound("No such user could be found!");
         }
 
-        [AllowAnonymous]
-        [HttpPost("login")]
-        public async Task<IActionResult> LoginByUsername([FromBody] UsernameLoginDto model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        // win auth
+        //[AllowAnonymous]
+        //[HttpPost("login")]
+        //public async Task<IActionResult> LoginByUsername([FromBody] UsernameLoginDto model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            var userId = currentUser;
+        //    var userId = currentUser;
 
-            LdapWrapper.GetDisplayNameByUserName(userId);
+        //    LdapWrapper.GetDisplayNameByUserName(userId);
 
-            if (userManager.FindByNameAsync(userId).Result is Associate user)
-            {
-                var token = await GenerateJwtToken(model.Username, user);
+        //    if (userManager.FindByNameAsync(userId).Result is Associate user)
+        //    {
+        //        var token = await GenerateJwtToken(model.Username, user);
 
-                return Ok(new { token });
-            }
+        //        return Ok(new { token });
+        //    }
 
 
-            return NotFound("No such user could be found!");
-        }
+        //    return NotFound("No such user could be found!");
+        //}
 
         private async Task<object> GenerateJwtToken(string email, Associate associate)
         {

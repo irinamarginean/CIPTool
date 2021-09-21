@@ -14,10 +14,12 @@ model = SentenceTransformer('paraphrase-distilroberta-base-v1')
 api = Flask(__name__)
 CORS(api)
 api.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///inquestion.db'
-params = urllib.parse.quote_plus('Driver=SQL Server;'
-                                     'Server=CLJ-C-0005V;'
-                                     'Database=CIPTool;'
-                                     'Trusted_Connection=yes;')
+params = urllib.parse.quote_plus('DRIVER={ODBC Driver 17 for SQL Server};'
+                                 'Server=CLJZ2230\\SQLEXPRESS,49172;'
+                                 'Database=CIPTool_Beta;'
+                                 'Trusted_Connection=no;'
+                                 'UID=cip;'
+                                 'PWD=Pas$1234;')
 engine = sqlalchemy.create_engine("mssql+pyodbc:///?odbc_connect=%s" % params)
 metadata = sqlalchemy.MetaData(bind=engine)
 
@@ -146,8 +148,8 @@ def get_idea_similarities():
     results = connection.execute(query.statement).fetchall()
     all_results = [(dict(row.items())) for row in results]
 
-    if all_results.count() == 0:
-        return []
+    if len(all_results) == 0:
+        return json.dumps([])
 
     for idea in all_results:
         current_categories_query = session.query(Category) \
